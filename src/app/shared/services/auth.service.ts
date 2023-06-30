@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { UserModel } from 'src/app/shared/models/user.model';
-import { CrmApiService } from './crm-api.service';
+import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 declare var b64utoutf8: any;
 declare var KJUR: any;
@@ -11,7 +11,7 @@ declare var KJUR: any;
 export class AuthService {
   loggedInUserDetails: UserModel = new UserModel();
 
-  constructor(private api: CrmApiService, private router: Router) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   login(user: any) {
     return new Promise((resolve, reject) => {

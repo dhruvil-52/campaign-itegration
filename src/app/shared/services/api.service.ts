@@ -6,11 +6,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  url: string = `${environment.url}`;
+  url: string = `${environment.crmUrl}`;
   token: string = null as any;
   apiKey: string = null as any;
+
   constructor(public http: HttpClient) {
   }
+
   setToken(token: any) {
     this.token = token;
   }
@@ -37,11 +39,12 @@ export class ApiService {
         };
         return headersConfig;
       } else {
+        return {};
       }
     }
   }
 
-  get(endpoint: string, params?: any, reqOpts?: any, showLoader: boolean = true) {
+  get(endpoint: string, params?: any, reqOpts?: any) {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
@@ -58,17 +61,11 @@ export class ApiService {
       reqOpts.headers = { ...reqOpts };
     }
 
-    if (showLoader) {
-      reqOpts.headers = new HttpHeaders({ 'showLoader': 'True' })
-      const seq = this.http.get(this.url + '/' + endpoint, { headers: reqOpts.headers, params: reqOpts.params });
-      return seq;
-    } else {
-      const seq = this.http.get(this.url + '/' + endpoint, reqOpts);
-      return seq;
-    }
+    const seq = this.http.get(this.url + '/' + endpoint, reqOpts);
+    return seq;
   }
 
-  getStatic(endpoint: string, params?: any, reqOpts?: any, showLoader: boolean = true) {
+  getStatic(endpoint: string, params?: any, reqOpts?: any) {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
@@ -84,28 +81,22 @@ export class ApiService {
     if (reqOpts) {
       reqOpts.headers = { ...reqOpts };
     }
-
-    if (showLoader) {
-      reqOpts.headers = new HttpHeaders({ 'showLoader': 'True' });
-      let seq = this.http.get(endpoint, { headers: reqOpts.headers, params: reqOpts.params });
-      return seq;
-    } else {
-      let seq = this.http.get(this.url + '/' + endpoint, reqOpts);
-      return seq;
-    }
+    let seq = this.http.get(this.url + '/' + endpoint, reqOpts);
+    return seq;
   }
 
-  post(endpoint: string, body: any, reqOpts?: any, showLoader = false, showPostLoader = true) {
+  post(endpoint: string, body: any, reqOpts?: any) {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
         headers: new HttpHeaders()
       };
     }
-    return this.http.post(this.url + '/' + endpoint, body);
+    return this.http.post(this.url + '/' + endpoint, body,
+      { params: reqOpts.params });
   }
 
-  postStatic(url: string, body: any, reqOpts?: any, showLoader = false, showPostLoader = true) {
+  postStatic(url: string, body: any, reqOpts?: any) {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
@@ -121,7 +112,6 @@ export class ApiService {
         params: new HttpParams()
       };
     }
-    reqOpts.headers = new HttpHeaders({ 'showLoader': 'True' })
     return this.http.put(this.url + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
@@ -132,7 +122,6 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    reqOpts.headers = new HttpHeaders({ 'showLoader': 'True' })
     return this.http.delete(this.url + '/' + endpoint, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
@@ -143,7 +132,6 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    reqOpts.headers = new HttpHeaders({ 'showLoader': 'True' })
     return this.http.patch(this.url + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 }
