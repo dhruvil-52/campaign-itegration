@@ -9,9 +9,6 @@ import { ToastrService } from "ngx-toastr";
 @Injectable()
 
 export class AuthInterceptor implements HttpInterceptor {
-  count: number = 0;
-  postCount: number = 0;
-  loadingTimer: any;
 
   constructor(
     private api: ApiService,
@@ -36,10 +33,11 @@ export class AuthInterceptor implements HttpInterceptor {
       Token = '';
     }
 
-    request = request.clone({
-      headers: request.headers.append('Authorization', 'Bearer ' + Token)
-    });
-
+    if (this.needToPassAuthorizationToken(request.url)) {
+      request = request.clone({
+        headers: request.headers.append('Authorization', 'Bearer ' + Token)
+      });
+    }
     return next.handle(request).pipe(
       tap(
         event => {
@@ -56,6 +54,16 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       )
     );
+  }
 
+  //  only for crm we have to pass Authorization token
+  needToPassAuthorizationToken(url: string) {
+    let lastIndex = url.lastIndexOf('/');
+    let endpoint = url.substring(lastIndex + 1, url.length);
+    if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -13,6 +13,14 @@ export class ApiService {
   constructor(public http: HttpClient) {
   }
 
+  getUrl(endpoint: string) {
+    if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
+      return environment.crmUrl
+    } else {
+      return environment.url
+    }
+  }
+
   setToken(token: any) {
     this.token = token;
   }
@@ -61,7 +69,7 @@ export class ApiService {
       reqOpts.headers = { ...reqOpts };
     }
 
-    const seq = this.http.get(this.url + '/' + endpoint, reqOpts);
+    const seq = this.http.get(this.getUrl(endpoint) + '/' + endpoint, reqOpts);
     return seq;
   }
 
@@ -81,7 +89,7 @@ export class ApiService {
     if (reqOpts) {
       reqOpts.headers = { ...reqOpts };
     }
-    let seq = this.http.get(this.url + '/' + endpoint, reqOpts);
+    let seq = this.http.get(this.getUrl(endpoint) + '/' + endpoint, reqOpts);
     return seq;
   }
 
@@ -92,7 +100,7 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.post(this.url + '/' + endpoint, body,
+    return this.http.post(this.getUrl(endpoint) + '/' + endpoint, body,
       { params: reqOpts.params });
   }
 
@@ -112,7 +120,7 @@ export class ApiService {
         params: new HttpParams()
       };
     }
-    return this.http.put(this.url + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.put(this.getUrl(endpoint) + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
   delete(endpoint: string, reqOpts?: any) {
@@ -122,7 +130,7 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.delete(this.url + '/' + endpoint, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.delete(this.getUrl(endpoint) + '/' + endpoint, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
   patch(endpoint: string, body: any, reqOpts?: any) {
@@ -132,6 +140,6 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.patch(this.url + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.patch(this.getUrl(endpoint) + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 }
