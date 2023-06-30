@@ -1,13 +1,13 @@
 <div class="row">
     <div class="col-sm-12 col-lg-6">
-        <mat-card class="cardWithShadow pointer" (click)="integrate('facebook')">
+        <mat-card class="cardWithShadow pointer" (click)="signInWithFB();">
             <mat-card-content class="p-24">
                 <div class="row">
                     <div class="col-5">
                         <img src="assets/images/svgs/facebook-icon.svg" class="align-middle m-2" alt="logo" />
                     </div>
                     <div class="col-7">
-                        <div class="d-flex align-items-center m-t-16">
+                        <div class="d-flex align-items-center">
                             <div class="mat-body-1 m-l-4">Integrate with</div>
                         </div>
                         <h4 class="mat-headline-5">Facebook</h4>
@@ -18,14 +18,14 @@
     </div>
 
     <div class="col-sm-12 col-lg-6">
-        <mat-card class="cardWithShadow pointer" (click)="integrate('google')">
+        <mat-card class="cardWithShadow pointer">
             <mat-card-content class="p-24">
                 <div class="row">
                     <div class="col-5">
                         <img src="assets/images/svgs/google-icon.svg" class="align-middle m-2" alt="logo" />
                     </div>
                     <div class="col-7">
-                        <div class="d-flex align-items-center m-t-16">
+                        <div class="d-flex align-items-center">
                             <div class="mat-body-1 m-l-4">Integrate with</div>
                         </div>
                         <h4 class="mat-headline-5">Google</h4>
@@ -33,5 +33,13 @@
                 </div>
             </mat-card-content>
         </mat-card>
+    </div>
+</div>
+
+<div *ngIf="loggedIn">
+    <img src="{{ user.response.picture.data.url }}">
+    <div>
+        <h4>{{ user.name }}</h4>
+        <p>{{ user.email }}</p>
     </div>
 </div>
