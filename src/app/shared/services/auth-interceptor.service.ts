@@ -26,16 +26,16 @@ export class AuthInterceptor implements HttpInterceptor {
     let Token;
     let headers: any = {};
     headers = request.headers;
-    try {
-      this.auth.setUser()
-    } catch (e) {
 
-    }
     try {
-      Token = JSON.parse(this.api.token);
-    } catch (e) {
-      Token = this.api.token;
+      let _Token = localStorage.getItem('BrokerToken');
+      if (!!_Token) {
+        Token = JSON.parse(_Token);
+      }
+    } catch (error) {
+      Token = '';
     }
+
     request = request.clone({
       headers: request.headers.append('Authorization', 'Bearer ' + Token)
     });
@@ -56,5 +56,6 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       )
     );
+
   }
 }
