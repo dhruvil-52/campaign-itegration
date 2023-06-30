@@ -1,0 +1,24 @@
+<mat-toolbar class="topbar">
+  <button mat-icon-button (click)="toggleMobileNav.emit()">
+    <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
+  </button>
+
+  <span class="flex-1-auto"></span>
+
+  <button mat-icon-button aria-label="Notifications">
+    <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover" width="35" />
+  </button>
+
+  <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
+    <button mat-menu-item (click)="authService.logout()">
+      <mat-icon class="d-flex align-items-center">
+        <i-tabler name="logout" class="icon-18 d-flex"></i-tabler>
+      </mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+  <a mat-flat-button [matMenuTriggerFor]="profilemenu" color="primary" class="d-flex justify-content-center">
+    {{authService.loggedInUserDetails.Name}}
+  </a>
+
+</mat-toolbar>

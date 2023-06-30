@@ -1,0 +1,37 @@
+<div class="blank-layout-container justify-content-center align-items-center bg-light-primary">
+  <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+            <img src="./assets/images/logos/dark-logo.svg" class="align-middle m-2" alt="logo" />
+          </div>
+
+          <div class="or-border m-t-30">Sign into your Buildesk CRM account</div>
+
+          <form class="m-t-30">
+
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Username</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput name="fname" [(ngModel)]="user.Username" class="form-control form-control-lg input-square"
+                type="text" placeholder="Username" required>
+            </mat-form-field>
+
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput [type]=" showPassword ? 'text':'password'" name="password" [(ngModel)]="user.Password"
+                class="form-control form-control-lg input-square " type="password" placeholder="Password" required>
+              <mat-icon style="cursor: pointer" matSuffix (click)="showPassword=!showPassword" [inline]="true">
+                {{ !showPassword ? "visibility_off" : "visibility" }}
+              </mat-icon>
+            </mat-form-field>
+
+            <a mat-flat-button color="primary" class="w-100" (click)="login()">
+              Sign In
+            </a>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
