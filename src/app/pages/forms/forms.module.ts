@@ -6,21 +6,20 @@ import { FormsComponent } from './forms/forms.component';
 import { AddFormComponent } from './add-form/add-form.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/material.module';
+import { ViewFormDetailsComponent } from './view-form-details/view-form-details.component';
 
 
 @NgModule({
   declarations: [
     FormsComponent,
-    AddFormComponent
+    AddFormComponent,
+    ViewFormDetailsComponent
   ],
   imports: [
     CommonModule,
     FormsRoutingModule,
     MaterialModule,
     FormsModule
-  ],
-  exports: [
-    AddFormComponent
   ]
 })
 export class LeadFormsModule { }

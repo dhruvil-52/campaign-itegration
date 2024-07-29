@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>LeadGen Form Details
+    <div mat-dialog-actions style="float: right;">
+        <button mat-icon-button (click)="onCancel()">
+            <mat-icon matListItemIcon>close</mat-icon>
+        </button>
+    </div>
+</h1>
+<div mat-dialog-content class="container">
+    <mat-list>
+        <mat-list-item>
+            <span matListItemTitle class="f-s-16 f-w-600">Title</span>
+            <span matListItemLine class="mat-body-1">Second line</span>
+            <span matListItemLine class="mat-body-1">Third line</span>
+        </mat-list-item>
+        <mat-list-item>
+            <span matListItemTitle class="f-s-16 f-w-600">Title</span>
+            <span matListItemLine class="mat-body-1">Second line. This line will truncate.</span>
+            <span class="mat-body-1">Third line</span>
+        </mat-list-item>
+    </mat-list>
+</div>

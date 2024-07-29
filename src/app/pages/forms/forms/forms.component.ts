@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFormComponent } from '../add-form/add-form.component';
+import { ViewFormDetailsComponent } from '../view-form-details/view-form-details.component';
 
 @Component({
   selector: 'app-forms',
@@ -16,6 +17,17 @@ export class FormsComponent {
 
   openAddFormModal(): void {
     const dialogRef = this.dialog.open(AddFormComponent, {
+      width: '600px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+
+  openViewFormDetailsModal(): void {
+    const dialogRef = this.dialog.open(ViewFormDetailsComponent, {
       width: '600px',
       data: {}
     });
