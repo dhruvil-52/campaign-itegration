@@ -8,5 +8,10 @@ export const navItems: NavItem[] = [
     displayName: 'Integration',
     iconName: 'topology-ring',
     route: '/integration',
+  },
+  {
+    displayName: 'Forms',
+    iconName: 'notes',
+    route: '/leadGen-forms',
   }
 ];

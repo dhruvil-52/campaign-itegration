@@ -6,5 +6,8 @@ export const PagesRoutes: Routes = [
   },
   {
     path: 'integration', loadChildren: () => import('./integration/integration.module').then((m) => m.IntegrationModule)
+  },
+  {
+    path: 'leadGen-forms', loadChildren: () => import('./forms/forms.module').then((m) => m.LeadFormsModule)
   }
 ];

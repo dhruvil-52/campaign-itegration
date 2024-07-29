@@ -24,6 +24,9 @@
 @import "pages/dashboards";
 @import "pages/auth";
 
-.pointer {
-    cursor: pointer !important;
+
+mat-form-field {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
 }
