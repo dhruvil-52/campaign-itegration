@@ -1,29 +1,56 @@
 <h1 mat-dialog-title>Add LeadGen Form</h1>
 <div mat-dialog-content class="container">
-    <mat-form-field class="w-100" appearance="outline">
+    <mat-form-field appearance="outline">
         <mat-label>Name Of LeadGen Form</mat-label>
         <input matInput type="text" [(ngModel)]="formData.name">
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field class="mb-2" appearance="outline">
         <mat-label>Page</mat-label>
-        <mat-select [(ngModel)]="formData.Page">
-            <mat-option *ngFor="let option of pages" [value]="option">
-                {{ option }}
+        <mat-select [(ngModel)]="formData.Page" (selectionChange)="onPageChange()">
+            <mat-option *ngFor="let page of pages" [value]="page">
+                {{ page.name }}
             </mat-option>
         </mat-select>
         <mat-hint>Select a page</mat-hint>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field class="mb-2" appearance="outline">
         <mat-label>LeadGen Form</mat-label>
-        <mat-select [(ngModel)]="formData.Form">
-            <mat-option *ngFor="let option of forms" [value]="option">
-                {{ option }}
+        <mat-select [(ngModel)]="formData.Form" (selectionChange)="onFormChange()">
+            <mat-option *ngFor="let form of forms" [value]="form">
+                {{ form.name }}
             </mat-option>
         </mat-select>
         <mat-hint>Select Lead form associated to the page</mat-hint>
     </mat-form-field>
+
+    <!-- <ng-container *ngIf="formData.Form && formData.Form.id"> -->
+    <ng-container>
+        <mat-label>
+            <h4 class="divider">Fields Mapping</h4>
+        </mat-label>
+        <div class="row" style="margin-bottom: 1rem;">
+            <div class="col-6">Required Fields</div>
+            <div class="col-6">Mapping Fields</div>
+        </div>
+        <div class="row" *ngFor="let field of requiredFields">
+            <div class="col-6 field">
+                <span>{{field.RequiredField}}</span>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Key</mat-label>
+                    <mat-select [(ngModel)]="field.UploadedField">
+                        <mat-option *ngFor="let question of formData.questions" [value]="question.key">
+                            {{ question.key }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </ng-container>
+
 </div>
 <div mat-dialog-actions style="float: right;">
     <button mat-button class="btn btn-secondary" (click)="onCancel()">Cancel</button>

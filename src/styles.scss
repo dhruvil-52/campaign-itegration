@@ -5,9 +5,13 @@ body {
     height: 100%;
 }
 
-body {
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -33,4 +37,17 @@ body {
 
 .pointer {
     cursor: pointer !important;
+}
+
+.divider {
+    border-bottom: 1px solid lightgray;
+    margin: 1rem 0;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
 }

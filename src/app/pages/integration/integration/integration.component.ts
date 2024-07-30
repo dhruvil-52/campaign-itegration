@@ -29,9 +29,8 @@ export class IntegrationComponent implements OnInit {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
-      console.log("user", (this.user))
-      localStorage.setItem('facebook', JSON.stringify(this.user))
-
+      console.log("user", JSON.stringify(this.user));
+      localStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
       this.controllerService.integrate(this.user).then((response) => {
         console.log("response", response)
       }).catch((error) => {
