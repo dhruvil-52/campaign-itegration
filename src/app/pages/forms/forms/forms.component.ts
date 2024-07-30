@@ -17,7 +17,7 @@ export class FormsComponent {
 
   openAddFormModal(): void {
     const dialogRef = this.dialog.open(AddFormComponent, {
-      width: '600px',
+      width: '900px',
       data: {}
     });
 

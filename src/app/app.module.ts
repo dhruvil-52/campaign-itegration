@@ -63,7 +63,9 @@ import { FacebookLoginProvider } from '@abacritt/angularx-social-login';
         providers: [
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.facebookAppId)
+            provider: new FacebookLoginProvider(environment.facebookAppId, {
+              version: 'v17.0'
+            })
           }
         ],
         onError: (err) => {
@@ -73,4 +75,8 @@ import { FacebookLoginProvider } from '@abacritt/angularx-social-login';
     }
   ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    console.log(environment.facebookAppId)
+  }
+}
