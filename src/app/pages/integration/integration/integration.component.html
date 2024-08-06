@@ -36,10 +36,42 @@
     </div>
 </div>
 
-<div *ngIf="loggedIn">
-    <img src="{{ user.response.picture.data.url }}">
-    <div>
-        <h4>{{ user.name }}</h4>
-        <p>{{ user.email }}</p>
+<ng-container *ngIf="loggedIn">
+    <div class="row mt-2">
+        <div class="col-sm-12 col-lg-6">
+            <img src="{{ user.photoUrl }}">
+        </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-1">
+            Id
+        </div>
+        <div class="col-sm-6 col-lg-5">
+            {{user.id}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-1">
+            Name
+        </div>
+        <div class="col-sm-6 col-lg-5">
+            {{user.name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-1">
+            Email
+        </div>
+        <div class="col-sm-6 col-lg-5">
+            {{user.email}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-1">
+            Token
+        </div>
+        <div class="col-sm-6 col-lg-5 authToken">
+            {{user.authToken}}
+        </div>
+    </div>
+</ng-container>
