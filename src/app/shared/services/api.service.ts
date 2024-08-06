@@ -14,11 +14,12 @@ export class ApiService {
   }
 
   getUrl(endpoint: string) {
-    if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
-      return environment.crmUrl
-    } else {
-      return environment.url
-    }
+    return environment.crmUrl
+    // if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
+    //   return environment.crmUrl
+    // } else {
+    //   return environment.url
+    // }
   }
 
   setToken(token: any) {
