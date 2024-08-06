@@ -5,15 +5,18 @@ import { tap } from "rxjs/operators";
 import { ApiService } from "./api.service";
 import { AuthService } from "./auth.service";
 import { ToastrService } from "ngx-toastr";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Injectable()
 
 export class AuthInterceptor implements HttpInterceptor {
+  count = 0;
 
   constructor(
     private api: ApiService,
     private auth: AuthService,
-    private ts: ToastrService
+    private ts: ToastrService,
+    private spinner: NgxSpinnerService
   ) { }
 
   intercept(
@@ -38,11 +41,26 @@ export class AuthInterceptor implements HttpInterceptor {
         headers: request.headers.append('Authorization', 'Bearer ' + Token)
       });
     }
+    this.count++;
+    if (this.count == 1) {
+
+      this.spinner.show();
+    }
     return next.handle(request).pipe(
       tap(
         event => {
+          if (event instanceof HttpResponse) {
+            this.count--;
+            if (this.count == 0) {
+              this.spinner.hide();
+            }
+          }
         },
         err => {
+          this.count--;
+          if (this.count == 0) {
+            this.spinner.hide();
+          }
           if (err.status == 401) {
             try {
               this.auth.logout();

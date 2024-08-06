@@ -25,6 +25,7 @@ import { environment } from 'src/environments/environment';
 
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { FacebookLoginProvider } from '@abacritt/angularx-social-login';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const fbLoginOptions = {
   scope: 'email,public_profile',
@@ -54,7 +55,8 @@ const fbLoginOptions = {
     MaterialModule,
     TablerIconsModule.pick(TablerIcons),
     ToastrModule.forRoot(),
-    SocialLoginModule
+    SocialLoginModule,
+    NgxSpinnerModule
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
