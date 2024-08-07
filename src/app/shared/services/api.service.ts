@@ -13,13 +13,12 @@ export class ApiService {
   constructor(public http: HttpClient) {
   }
 
-  getUrl(endpoint: string) {
-    return environment.crmUrl
-    // if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
-    //   return environment.crmUrl
-    // } else {
-    //   return environment.url
-    // }
+  getUrl(type: string) {
+    if (type.toLowerCase() == ("facebook").toLowerCase()) {
+      return environment.facebookUrl
+    } else {
+      return environment.crmUrl
+    }
   }
 
   setToken(token: any) {
@@ -53,26 +52,14 @@ export class ApiService {
     }
   }
 
-  get(endpoint: string, params?: any, reqOpts?: any) {
-    if (!reqOpts) {
-      reqOpts = {
-        params: new HttpParams(),
-        headers: new HttpHeaders()
-      };
-    }
-    if (params) {
-      reqOpts.params = new HttpParams();
-      for (let k in params) {
-        reqOpts.params = reqOpts.params.set(k, params[k]);
-      }
-    }
-    if (reqOpts) {
-      reqOpts.headers = { ...reqOpts };
-    }
-
-    const seq = this.http.get(this.getUrl(endpoint) + '/' + endpoint, reqOpts);
+  get(endpoint: string, params?: any, reqOpts?: any, showLoader: boolean = true) {
+    const seq = this.http.get(this.getUrl("CRM") + '/' + endpoint, {
+      headers: new HttpHeaders(),
+      params: params
+    });
     return seq;
   }
+
 
   getStatic(endpoint: string, params?: any, reqOpts?: any) {
     if (!reqOpts) {
@@ -90,7 +77,7 @@ export class ApiService {
     if (reqOpts) {
       reqOpts.headers = { ...reqOpts };
     }
-    let seq = this.http.get(this.getUrl(endpoint) + '/' + endpoint, reqOpts);
+    let seq = this.http.get(this.getUrl("CRM") + '/' + endpoint, reqOpts);
     return seq;
   }
 
@@ -101,7 +88,7 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.post(this.getUrl(endpoint) + '/' + endpoint, body,
+    return this.http.post(this.getUrl("CRM") + '/' + endpoint, body,
       { params: reqOpts.params });
   }
 
@@ -121,7 +108,7 @@ export class ApiService {
         params: new HttpParams()
       };
     }
-    return this.http.put(this.getUrl(endpoint) + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.put(this.getUrl("CRM") + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
   delete(endpoint: string, reqOpts?: any) {
@@ -131,7 +118,7 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.delete(this.getUrl(endpoint) + '/' + endpoint, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.delete(this.getUrl("CRM") + '/' + endpoint, { params: reqOpts.params, headers: new HttpHeaders() });
   }
 
   patch(endpoint: string, body: any, reqOpts?: any) {
@@ -141,6 +128,16 @@ export class ApiService {
         headers: new HttpHeaders()
       };
     }
-    return this.http.patch(this.getUrl(endpoint) + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
+    return this.http.patch(this.getUrl("CRM") + '/' + endpoint, body, { params: reqOpts.params, headers: new HttpHeaders() });
+  }
+
+  getFaceBook(endpoint: string, params?: any, reqOpts?: any, showLoader: boolean = true) {
+    const seq = this.http.get(this.getUrl('facebook') + '/' + endpoint);
+    return seq;
+  }
+
+  postFaceBook(endpoint: string, params?: any, reqOpts?: any, showLoader: boolean = true) {
+    const seq = this.http.post(this.getUrl('facebook') + '/' + endpoint, params.toString());
+    return seq;
   }
 }

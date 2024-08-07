@@ -26,6 +26,7 @@ export class IntegrationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getLoggedInUserDetails();
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
@@ -37,5 +38,20 @@ export class IntegrationComponent implements OnInit {
         this.ts.error(`Error While Integrate to Facebook`, 'Error')
       })
     });
+  }
+
+  getLoggedInUserDetails() {
+    console.log("44")
+    this.user = {};
+    this.loggedIn = false;
+    this.controllerService.getLoggedInUserDetails().then((data: any) => {
+      if (data.Success) {
+        console.log("loggedin user data", data)
+        this.user = data.Data;
+        this.loggedIn = true;
+      }
+    }).catch((error) => {
+      this.ts.info(`Please Integrate with Facebook`, 'Info')
+    })
   }
 }

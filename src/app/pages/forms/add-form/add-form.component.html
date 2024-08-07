@@ -12,7 +12,8 @@
                 {{ page.name }}
             </mat-option>
         </mat-select>
-        <mat-hint>Select a page</mat-hint>
+        <mat-hint *ngIf="pages.length">Select a page</mat-hint>
+        <mat-hint class="error" *ngIf="!pages.length">No Page Found</mat-hint>
     </mat-form-field>
 
     <mat-form-field class="mb-2" appearance="outline">
@@ -22,7 +23,8 @@
                 {{ form.name }}
             </mat-option>
         </mat-select>
-        <mat-hint>Select Lead form associated to the page</mat-hint>
+        <mat-hint *ngIf="forms.length">Select Lead form associated to the page</mat-hint>
+        <mat-hint class="error" *ngIf="!forms.length">No Form Found</mat-hint>
     </mat-form-field>
 
     <ng-container *ngIf="formData.Form && formData.Form.id">

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { HttpClient } from '@angular/common/http';
+import { ControllerService } from 'src/app/shared/services/controller.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-form',
@@ -13,14 +14,15 @@ export class AddFormComponent implements OnInit {
   formData: any = {};
   loggedInUserDetails: any = {};
   requiredFields: any = [
-    { RequiredField: "Name" },
-    { RequiredField: "ClientContact" },
-    { RequiredField: "ClientEmail" }
+    { RequiredField: "First Name*" },
+    { RequiredField: "Last Name" },
+    { RequiredField: "Phone*" },
+    { RequiredField: "Email" }
   ];
 
   constructor(
-    private http: HttpClient,
-    public dialogRef: MatDialogRef<AddFormComponent>) {
+    public dialogRef: MatDialogRef<AddFormComponent>,
+    private cs: ControllerService) {
   }
 
   ngOnInit(): void {
@@ -28,26 +30,38 @@ export class AddFormComponent implements OnInit {
       let data: any = localStorage.getItem('loggedInUserDetails');
       this.loggedInUserDetails = JSON.parse(data);
       console.log("loggedInUserDetails", JSON.stringify(this.loggedInUserDetails));
-      this.http.get(`https://graph.facebook.com/v17.0/me/accounts?access_token=${this.loggedInUserDetails.authToken}`).subscribe((response: any) => {
+      this.cs.getAllPages(this.loggedInUserDetails).then((response: any) => {
         this.pages = response.data;
         console.log("Pages", JSON.stringify(this.pages));
+      }).catch((e) => {
+        console.log("Error while getting Pages", e)
       })
     }
   }
 
   onPageChange() {
     console.log(this.formData.Page)
-    this.http.get(`https://graph.facebook.com/v17.0/${this.formData.Page.id}/leadgen_forms?access_token=${this.formData.Page.access_token}`).subscribe((response: any) => {
+    this.cs.subscribePage(this.formData.Page).then((response: any) => {
+      console.log("subscrib page", JSON.stringify(response));
+    }).catch((e) => {
+      console.log("Error while getting Forms By Page Id", e)
+    })
+
+    this.cs.getAllFormsByPageId(this.formData.Page).then((response: any) => {
       this.forms = response.data;
       console.log("Forms", JSON.stringify(this.forms));
+    }).catch((e) => {
+      console.log("Error while getting Forms By Page Id", e)
     })
   }
 
   onFormChange() {
     console.log(this.formData.Form)
-    this.http.get(`https://graph.facebook.com/v17.0/${this.formData.Form.id}?access_token=${this.formData.Page.access_token}&fields=questions`).subscribe((response: any) => {
+    this.cs.getFormDataByFormId(this.formData.Form, this.formData.Page).then((response: any) => {
       this.formData.questions = response.questions;
       console.log("Form Data", JSON.stringify(this.formData));
+    }).catch((e) => {
+      console.log("Error while getting Form Details By form Id", e)
     })
   }
 
