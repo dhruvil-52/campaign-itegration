@@ -44,7 +44,7 @@
             <div class="col-6">
                 <mat-form-field appearance="outline">
                     <mat-label>Key</mat-label>
-                    <mat-select (selectionChange)="onFieldSelected($event,field)">
+                    <mat-select [(ngModel)]="field.FBKey" (selectionChange)="onFieldSelected($event,field)">
                         <mat-option *ngFor="let question of questions" [value]="question">
                             {{ question.key }}
                         </mat-option>

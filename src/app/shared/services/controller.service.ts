@@ -44,13 +44,21 @@ export class ControllerService {
   }
 
 
-  getAllForms() {
+  getAllForms(reqData: any = {}) {
     return new Promise((resolve, reject) => {
-      let reqData = {
-        "type": "automation",
-        "code": "facebook"
-      }
-      this.api.get("", reqData).subscribe((data: any) => {
+      this.api.get("CompanyMetaForm/Get", { jsondata: JSON.stringify(reqData) }).subscribe((data: any) => {
+        if (data.Success) {
+          resolve(data.Data)
+        } else {
+          reject(data.Message);
+        }
+      });
+    })
+  }
+
+  addFromData(reqData: any = {}) {
+    return new Promise((resolve, reject) => {
+      this.api.post("CompanyMetaForm/Create", reqData).subscribe((data: any) => {
         if (data.Success) {
           resolve(data.Data)
         } else {

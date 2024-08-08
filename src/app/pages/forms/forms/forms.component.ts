@@ -28,11 +28,9 @@ export class FormsComponent implements OnInit {
     console.log("28");
     this.forms = [];
     this.cs.getAllForms().then((data: any) => {
-      if (data.Success) {
-        console.log("all forms", data)
-        this.forms = data.Data;
-      }
-    }).catch((error) => {
+      console.log("all forms", data)
+      this.forms = data;
+    }, (error) => {
       console.log("Error while getting Forms", error)
       this.ts.error(`Error while getting Forms`, 'Error')
     })
@@ -46,6 +44,7 @@ export class FormsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', JSON.stringify(result));
+      this.getAllForms();
     });
   }
 

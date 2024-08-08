@@ -114,7 +114,12 @@ export class AddFormComponent implements OnInit {
     } else if (this.checkRequiredQuestionFieldsAreEmpty()) {
       this.ts.error("Please Fill required Form fields");
     } else {
-      this.dialogRef.close({ data: this.formData });
+      this.cs.addFromData(this.formData).then((data) => {
+        this.ts.success(`Successfully LedGen Form Data Submitted`, 'Error')
+        this.dialogRef.close({ data: this.formData });
+      }, (error) => {
+        this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+      })
     }
   }
 

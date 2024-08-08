@@ -31,9 +31,9 @@ export class IntegrationComponent implements OnInit {
       this.user = user;
       this.loggedIn = (user != null);
       console.log("user", JSON.stringify(this.user));
-      localStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
       this.controllerService.integrate(this.user).then((response) => {
-        console.log("response", response)
+        console.log("response", response);
+        this.getLoggedInUserDetails();
       }).catch((error) => {
         this.ts.error(`Error While Integrate to Facebook`, 'Error')
       })
@@ -49,6 +49,7 @@ export class IntegrationComponent implements OnInit {
         console.log("loggedin user data", data)
         this.user = data.Data;
         this.loggedIn = true;
+        localStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
       }
     }).catch((error) => {
       this.ts.info(`Please Integrate with Facebook`, 'Info')

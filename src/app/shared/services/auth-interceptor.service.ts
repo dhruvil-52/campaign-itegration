@@ -79,9 +79,9 @@ export class AuthInterceptor implements HttpInterceptor {
     let lastIndex = url.lastIndexOf('/');
     let endpoint = url.substring(lastIndex + 1, url.length);
     if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
-      return true;
-    } else {
       return false;
+    } else {
+      return true;
     }
   }
 }
