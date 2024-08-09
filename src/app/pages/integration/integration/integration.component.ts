@@ -45,9 +45,9 @@ export class IntegrationComponent implements OnInit {
     this.user = {};
     this.loggedIn = false;
     this.controllerService.getLoggedInUserDetails().then((data: any) => {
-      if (data.Success) {
-        console.log("loggedin user data", data)
-        this.user = data.Data;
+      console.log("loggedin user data", data)
+      if (data.RawCredential) {
+        this.user = JSON.parse(data.RawCredential);
         this.loggedIn = true;
         localStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
       }
