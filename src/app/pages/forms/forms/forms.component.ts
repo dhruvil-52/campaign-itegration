@@ -47,7 +47,7 @@ export class FormsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', JSON.stringify(result));
-      if (result.data) {
+      if (result && result.data) {
         this.getAllForms();
       }
     });
