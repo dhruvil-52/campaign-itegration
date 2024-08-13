@@ -34,11 +34,8 @@ export class LeadsComponent implements OnInit {
       if (localStorage.getItem('loggedInUserDetails')) {
         let data: any = localStorage.getItem('loggedInUserDetails');
         this.loggedInUserDetails = JSON.parse(data);
-        this.loggedInUserDetails.authToken = environment.authToken;
         this.getPagesOfForm();
       }
-      this.loggedInUserDetails.authToken = environment.authToken;
-      this.getPagesOfForm();
     }
   }
 
