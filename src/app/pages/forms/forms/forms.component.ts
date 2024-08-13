@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./forms.component.scss']
 })
 export class FormsComponent implements OnInit {
-  displayedColumns: string[] = ['Name', 'PageName', 'CreatedOn'];
+  displayedColumns: string[] = ['Name', 'PageName', 'CreatedOn', 'Action'];
   forms = [
   ];
 
@@ -64,7 +64,7 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  openLeadPage(data: any) {
+  viewLeads(data: any) {
     console.log(data)
     localStorage.setItem('selectedForm', JSON.stringify(data));
     this.router.navigate(['leadGen-forms/leads', data.FormRefId]);
