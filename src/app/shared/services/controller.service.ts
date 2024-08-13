@@ -118,4 +118,17 @@ export class ControllerService {
       });
     })
   }
+
+
+  getAllLeadsByFormId(formId: any = null, userData: any = {}) {
+    return new Promise((resolve, reject) => {
+      this.api.getFaceBook(formId + "/leads?access_token=" + userData.authToken).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
 }

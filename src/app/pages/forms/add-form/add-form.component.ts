@@ -124,6 +124,6 @@ export class AddFormComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.dialogRef.close({ data: {} });
+    this.dialogRef.close();
   }
 }

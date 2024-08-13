@@ -26,14 +26,14 @@ export class IntegrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLoggedInUserDetails();
+    // this.getLoggedInUserDetails();
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
       console.log("user", JSON.stringify(this.user));
       this.controllerService.integrate(this.user).then((response) => {
         console.log("response", response);
-        this.getLoggedInUserDetails();
+        // this.getLoggedInUserDetails();
       }).catch((error) => {
         this.ts.error(`Error While Integrate to Facebook`, 'Error')
       })

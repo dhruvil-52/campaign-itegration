@@ -4,6 +4,7 @@ import { AddFormComponent } from '../add-form/add-form.component';
 import { ViewFormDetailsComponent } from '../view-form-details/view-form-details.component';
 import { ControllerService } from 'src/app/shared/services/controller.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forms',
@@ -11,13 +12,15 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./forms.component.scss']
 })
 export class FormsComponent implements OnInit {
-  displayedColumns: string[] = ['Name', 'CreatedOn'];
+  displayedColumns: string[] = ['Name', 'PageName', 'CreatedOn'];
   forms = [
   ];
 
-  constructor(public dialog: MatDialog,
+  constructor(
+    public dialog: MatDialog,
     private cs: ControllerService,
-    private ts: ToastrService
+    private ts: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +47,9 @@ export class FormsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', JSON.stringify(result));
-      this.getAllForms();
+      if (result.data) {
+        this.getAllForms();
+      }
     });
   }
 
@@ -57,5 +62,11 @@ export class FormsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
     });
+  }
+
+  openLeadPage(data: any) {
+    console.log(data)
+    localStorage.setItem('selectedForm', JSON.stringify(data));
+    this.router.navigate(['leadGen-forms/leads', data.FormRefId]);
   }
 }

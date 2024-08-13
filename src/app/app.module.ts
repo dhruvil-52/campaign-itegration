@@ -12,6 +12,7 @@ import { AuthInterceptor } from './shared/services/auth-interceptor.service';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 
 
 import { BlankComponent } from './containers/blank/blank.component';
@@ -25,7 +26,7 @@ import { environment } from 'src/environments/environment';
 
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { FacebookLoginProvider } from '@abacritt/angularx-social-login';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxUiLoaderConfig } from 'ngx-ui-loader';
 
 const fbLoginOptions = {
   scope: 'email,public_profile',
@@ -34,6 +35,14 @@ const fbLoginOptions = {
   version: 'v17.0',
   config_id: "1201682481257707"
 }
+
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  fgsType: 'three-bounce',
+  fgsColor: '#5d87ff',
+  pbThickness: 5,
+  pbColor: '#5d87ff',
+  overlayColor: 'rgba(255, 255, 255, 0.8)',
+};
 
 @NgModule({
   declarations: [
@@ -56,7 +65,8 @@ const fbLoginOptions = {
     TablerIconsModule.pick(TablerIcons),
     ToastrModule.forRoot(),
     SocialLoginModule,
-    NgxSpinnerModule
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true })
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],

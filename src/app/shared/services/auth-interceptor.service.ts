@@ -2,10 +2,9 @@ import { Injectable } from "@angular/core";
 import { HttpInterceptor, HttpRequest, HttpEvent, HttpHandler, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { ApiService } from "./api.service";
 import { AuthService } from "./auth.service";
 import { ToastrService } from "ngx-toastr";
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxUiLoaderService } from "ngx-ui-loader";
 
 @Injectable()
 
@@ -13,10 +12,9 @@ export class AuthInterceptor implements HttpInterceptor {
   count = 0;
 
   constructor(
-    private api: ApiService,
     private auth: AuthService,
     private ts: ToastrService,
-    private spinner: NgxSpinnerService
+    private ngxLoader: NgxUiLoaderService
   ) { }
 
   intercept(
@@ -43,8 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     this.count++;
     if (this.count == 1) {
-
-      this.spinner.show();
+      this.ngxLoader.start();
     }
     return next.handle(request).pipe(
       tap(
@@ -52,14 +49,14 @@ export class AuthInterceptor implements HttpInterceptor {
           if (event instanceof HttpResponse) {
             this.count--;
             if (this.count == 0) {
-              this.spinner.hide();
+              this.ngxLoader.stop();
             }
           }
         },
         err => {
           this.count--;
           if (this.count == 0) {
-            this.spinner.hide();
+            this.ngxLoader.stop();
           }
           if (err.status == 401) {
             try {
