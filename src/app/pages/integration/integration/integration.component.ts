@@ -14,6 +14,7 @@ export class IntegrationComponent implements OnInit, OnDestroy {
   user: any;
   loggedIn: any;
   facebookSubscription: Subscription;
+  onConnectToFacebook = false;
 
   constructor(
     private controllerService: ControllerService,
@@ -22,6 +23,7 @@ export class IntegrationComponent implements OnInit, OnDestroy {
     public userService: UserService) { }
 
   signInWithFB(): void {
+    this.onConnectToFacebook = true
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
@@ -35,12 +37,15 @@ export class IntegrationComponent implements OnInit, OnDestroy {
       this.user = user;
       this.loggedIn = (user != null);
       console.log("user", JSON.stringify(this.user));
-      this.controllerService.integrate(this.user).then((response) => {
-        console.log("response", response);
-        this.userService.getLoggedInUserDetails();
-      }).catch((error) => {
-        this.ts.error(`Error While Integrate to Facebook`, 'Error')
-      })
+      if (this.onConnectToFacebook) {
+        console.log("onConnectToFacebook true");
+        this.controllerService.integrate(this.user).then((response) => {
+          console.log("response", response);
+          this.userService.getLoggedInUserDetails();
+        }).catch((error) => {
+          this.ts.error(`Error While Integrate to Facebook`, 'Error')
+        })
+      }
     })
   }
 
@@ -49,5 +54,6 @@ export class IntegrationComponent implements OnInit, OnDestroy {
     if (!!this.facebookSubscription) {
       this.facebookSubscription.unsubscribe();
     }
+    this.onConnectToFacebook = false;
   }
 }
