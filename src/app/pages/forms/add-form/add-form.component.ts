@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ControllerService } from 'src/app/shared/services/controller.service';
-import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-add-form',
@@ -48,14 +48,14 @@ export class AddFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddFormComponent>,
     private cs: ControllerService,
-    private ts: ToastrService) {
+    private ts: ToastrService,
+    private userService: UserService) {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('loggedInUserDetails')) {
-      let data: any = localStorage.getItem('loggedInUserDetails');
-      this.loggedInUserDetails = JSON.parse(data);
-      console.log("loggedInUserDetails", JSON.stringify(this.loggedInUserDetails));
+    if (!!this.userService.user) {
+      this.loggedInUserDetails = this.userService.user;
+      console.log('loggedInUserDetails', JSON.stringify(this.loggedInUserDetails));
       this.cs.getAllPages(this.loggedInUserDetails).then((response: any) => {
         this.pages = response.data;
         console.log("Pages", JSON.stringify(this.pages));

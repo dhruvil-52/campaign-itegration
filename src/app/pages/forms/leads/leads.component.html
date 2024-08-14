@@ -3,7 +3,7 @@
         <mat-card class="cardWithShadow">
             <mat-card-content class="p-24">
                 <mat-card-title>
-                    Leads {{formData ? 'Of '+ (formData.Name | titlecase) : ''}}
+                    Leads &nbsp; {{formData ? ' from &nbsp; '+ (formData.Name | titlecase) : ''}}
                 </mat-card-title>
                 <div class="table-responsive m-t-16">
                     <table mat-table [dataSource]="leads" class="mat-elevation-z8">

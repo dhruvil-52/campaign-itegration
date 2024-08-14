@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ControllerService } from 'src/app/shared/services/controller.service';
-import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-leads',
   templateUrl: './leads.component.html',
   styleUrls: ['./leads.component.scss']
 })
-export class LeadsComponent implements OnInit {
+export class LeadsComponent implements OnInit, OnDestroy {
   formId: any;
   leads: any = [];
   loggedInUserDetails: any = {};
@@ -19,10 +19,11 @@ export class LeadsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private cs: ControllerService,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe,
+    private userService: UserService) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.params.subscribe((data: any) => {
       this.formId = + data['id'];
     })
@@ -31,9 +32,8 @@ export class LeadsComponent implements OnInit {
       this.formData = JSON.parse(data);
     }
     if (this.formId) {
-      if (localStorage.getItem('loggedInUserDetails')) {
-        let data: any = localStorage.getItem('loggedInUserDetails');
-        this.loggedInUserDetails = JSON.parse(data);
+      if (!!this.userService.user) {
+        this.loggedInUserDetails = this.userService.user;
         this.getPagesOfForm();
       }
     }
@@ -66,5 +66,8 @@ export class LeadsComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    localStorage.removeItem('selectedForm')
+  }
 
 }

@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ControllerService } from 'src/app/shared/services/controller.service';
+import { Subscription } from 'rxjs';
 import { FacebookLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-integration',
   templateUrl: './integration.component.html',
   styleUrls: ['./integration.component.scss']
 })
-export class IntegrationComponent implements OnInit {
+export class IntegrationComponent implements OnInit, OnDestroy {
   user: any;
   loggedIn: any;
+  facebookSubscription: Subscription;
 
   constructor(
     private controllerService: ControllerService,
     private ts: ToastrService,
-    private authService: SocialAuthService) { }
+    private authService: SocialAuthService,
+    public userService: UserService) { }
 
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
@@ -26,33 +30,24 @@ export class IntegrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getLoggedInUserDetails();
-    this.authService.authState.subscribe((user) => {
+    console.log("33")
+    this.facebookSubscription = this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
       console.log("user", JSON.stringify(this.user));
       this.controllerService.integrate(this.user).then((response) => {
         console.log("response", response);
-        // this.getLoggedInUserDetails();
+        this.userService.getLoggedInUserDetails();
       }).catch((error) => {
         this.ts.error(`Error While Integrate to Facebook`, 'Error')
       })
-    });
+    })
   }
 
-  getLoggedInUserDetails() {
-    console.log("44")
-    this.user = {};
-    this.loggedIn = false;
-    this.controllerService.getLoggedInUserDetails().then((data: any) => {
-      console.log("loggedin user data", data)
-      if (data.RawCredential) {
-        this.user = JSON.parse(data.RawCredential);
-        this.loggedIn = true;
-        localStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
-      }
-    }).catch((error) => {
-      this.ts.info(`Please Integrate with Facebook`, 'Info')
-    })
+  ngOnDestroy(): void {
+    console.log("called destroy")
+    if (!!this.facebookSubscription) {
+      this.facebookSubscription.unsubscribe();
+    }
   }
 }

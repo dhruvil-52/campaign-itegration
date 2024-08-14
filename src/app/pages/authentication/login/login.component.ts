@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +15,12 @@ export class AppSideLoginComponent {
   constructor(
     private authService: AuthService,
     private ts: ToastrService,
-    private router: Router) { }
+    private router: Router,
+    private userService: UserService) { }
 
   login() {
     this.authService.login(this.user).then((response: any) => {
+      this.userService.getLoggedInUserDetails();
       this.router.navigate(["/"]);
     }).catch((e: any) => {
       this.ts.error(e, 'Login');

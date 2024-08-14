@@ -75,7 +75,7 @@ export class AuthInterceptor implements HttpInterceptor {
   needToPassAuthorizationToken(url: string) {
     let lastIndex = url.lastIndexOf('/');
     let endpoint = url.substring(lastIndex + 1, url.length);
-    if (endpoint.toLowerCase() == ("Logout").toLowerCase() || endpoint.toLowerCase() == ("Login").toLowerCase()) {
+    if (endpoint.toLowerCase() == ("Login").toLowerCase()) {
       return false;
     } else {
       return true;
