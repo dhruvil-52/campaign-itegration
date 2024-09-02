@@ -56,8 +56,8 @@ export class AddFormComponent implements OnInit {
     if (!!this.userService.user) {
       this.loggedInUserDetails = this.userService.user;
       console.log('loggedInUserDetails', JSON.stringify(this.loggedInUserDetails));
-      this.cs.getAllPages(this.loggedInUserDetails).then((response: any) => {
-        this.pages = response.data;
+      this.cs.getAllPages().then((response: any) => {
+        this.pages = response.Data;
         console.log("Pages", JSON.stringify(this.pages));
       }).catch((e) => {
         console.log("Error while getting Pages", e)
@@ -74,7 +74,7 @@ export class AddFormComponent implements OnInit {
     })
 
     this.cs.getAllFormsByPageId(this.formData.Page).then((response: any) => {
-      this.forms = response.data;
+      this.forms = response.Data;
       console.log("Forms", JSON.stringify(this.forms));
     }).catch((e) => {
       console.log("Error while getting Forms By Page Id", e)
@@ -84,7 +84,7 @@ export class AddFormComponent implements OnInit {
   onFormChange() {
     console.log(this.formData.Form)
     this.cs.getFormDataByFormId(this.formData.Form, this.formData.Page).then((response: any) => {
-      this.questions = response.questions;
+      this.questions = response.Data;
       console.log("Form Data", JSON.stringify(this.questions));
     }).catch((e) => {
       console.log("Error while getting Form Details By form Id", e)

@@ -68,9 +68,9 @@ export class ControllerService {
     })
   }
 
-  getAllPages(loggedInUserDetails: any = {}) {
+  getAllPages() {
     return new Promise((resolve, reject) => {
-      this.api.getFaceBook("me/accounts?access_token=" + loggedInUserDetails.authToken).subscribe((data: any) => {
+      this.api.get("FbMetaApi/GetPages").subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
@@ -81,10 +81,12 @@ export class ControllerService {
   }
 
   subscribePage(pageDetails: any = {}) {
-    const body = new URLSearchParams();
-    body.set('subscribed_fields', 'leadgen');
+    let reqData = {
+      PageId: pageDetails.id,
+      AccessToken: pageDetails.access_token
+    }
     return new Promise((resolve, reject) => {
-      this.api.postFaceBook(pageDetails.id + "/subscribed_apps?access_token=" + pageDetails.access_token, body).subscribe((data: any) => {
+      this.api.get("FbMetaApi/GetSubscribedAppsByPage", reqData).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
@@ -96,8 +98,12 @@ export class ControllerService {
 
 
   getAllFormsByPageId(pageDetails: any = {}) {
+    let reqData = {
+      PageId: pageDetails.id,
+      AccessToken: pageDetails.access_token
+    }
     return new Promise((resolve, reject) => {
-      this.api.getFaceBook(pageDetails.id + "/leadgen_forms?access_token=" + pageDetails.access_token).subscribe((data: any) => {
+      this.api.get("FbMetaApi/GetForms", reqData).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
@@ -108,8 +114,12 @@ export class ControllerService {
   }
 
   getFormDataByFormId(formDetails: any = {}, pageDetails: any = {}) {
+    let reqData = {
+      FormId: formDetails.id,
+      AccessToken: pageDetails.access_token
+    }
     return new Promise((resolve, reject) => {
-      this.api.getFaceBook(formDetails.id + "?access_token=" + pageDetails.access_token + '&fields=questions').subscribe((data: any) => {
+      this.api.get("FbMetaApi/GetFormData", reqData).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
@@ -121,8 +131,11 @@ export class ControllerService {
 
 
   getAllLeadsByFormId(formId: any = null, userData: any = {}) {
+    let reqData = {
+      FormId: formId
+    }
     return new Promise((resolve, reject) => {
-      this.api.getFaceBook(formId + "/leads?access_token=" + userData.authToken).subscribe((data: any) => {
+      this.api.get("FbMetaApi/GetLeadsByForm", reqData).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
