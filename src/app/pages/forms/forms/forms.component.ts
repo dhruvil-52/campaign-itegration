@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./forms.component.scss']
 })
 export class FormsComponent implements OnInit {
-  displayedColumns: string[] = ['Name', 'PageName', 'CreatedOn', 'Action'];
+  displayedColumns: string[] = ['Name', 'FacebookFormName', 'PageName', 'CreatedOn', 'Action'];
   forms = [
   ];
 
