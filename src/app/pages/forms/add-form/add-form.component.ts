@@ -39,6 +39,32 @@ export class AddFormComponent implements OnInit {
         "CRMLabel": "Email",
         "FBKey": "",
         "FBLabel": ""
+      },
+      {
+        "CRMKey": "campaign",
+        "CRMLabel": "Campaign",
+        "FBKey": "",
+        "FBLabel": ""
+      },
+      {
+        "CRMKey": "project",
+        "CRMLabel": "Project",
+        "FBKey": "",
+        "FBLabel": ""
+      },
+      {
+        "CRMKey": "remark",
+        "CRMLabel": "Remark",
+        "FBKey": "",
+        "FBLabel": "",
+        "placeholder": "Remark",
+        "isInput": true
+      },
+      {
+        "CRMKey": "user",
+        "CRMLabel": "User",
+        "FBKey": "",
+        "FBLabel": ""
       }
     ]
   };
@@ -66,9 +92,11 @@ export class AddFormComponent implements OnInit {
   }
 
   onPageChange() {
+    this.forms = [];
+    this.formData.Form = null;
     console.log(this.formData.Page)
     this.cs.subscribePage(this.formData.Page).then((response: any) => {
-      console.log("subscrib page", JSON.stringify(response));
+      console.log("subscribe page", JSON.stringify(response));
     }).catch((e) => {
       console.log("Error while getting Forms By Page Id", e)
     })
@@ -92,9 +120,13 @@ export class AddFormComponent implements OnInit {
   }
 
   onFieldSelected(event: any, field: any) {
-    let data = JSON.parse(JSON.stringify(event.value));
-    field.FBKey = data.key
-    field.FBLabel = data.label
+    field.FBKey = "";
+    field.FBLabel = "";
+    if (!!event && Object.keys(event).length) {
+      let data = JSON.parse(JSON.stringify(event));
+      field.FBKey = data.key;
+      field.FBLabel = data.label;
+    }
   }
 
   checkRequiredQuestionFieldsAreEmpty() {
@@ -114,12 +146,13 @@ export class AddFormComponent implements OnInit {
     } else if (this.checkRequiredQuestionFieldsAreEmpty()) {
       this.ts.error("Please Fill required Form fields");
     } else {
-      this.cs.addFromData(this.formData).then((data) => {
-        this.ts.success(`Successfully LedGen Form Data Submitted`, 'Error')
-        this.dialogRef.close({ data: this.formData });
-      }, (error) => {
-        this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
-      })
+      console.log(JSON.stringify(this.formData))
+      // this.cs.addFromData(this.formData).then((data) => {
+      //   this.ts.success(`Successfully LedGen Form Data Submitted`, 'Error')
+      //   this.dialogRef.close({ data: this.formData });
+      // }, (error) => {
+      //   this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+      // })
     }
   }
 

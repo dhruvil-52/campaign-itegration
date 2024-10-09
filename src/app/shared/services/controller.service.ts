@@ -8,6 +8,18 @@ export class ControllerService {
 
   constructor(private api: ApiService) { }
 
+  getUserDetailsByAccessToken(accessToken: any = {}) {
+    return new Promise((resolve, reject) => {
+      this.api.getFaceBook("me?fields=id,name,email,picture,first_name,last_name&access_token=" + accessToken).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+
   integrate(userData: any = {}) {
     return new Promise((resolve, reject) => {
       let reqData = {
@@ -80,13 +92,26 @@ export class ControllerService {
     })
   }
 
+  // subscribePage(pageDetails: any = {}) {
+  //   let reqData = {
+  //     PageId: pageDetails.id,
+  //     AccessToken: pageDetails.access_token
+  //   }
+  //   return new Promise((resolve, reject) => {
+  //     this.api.get("FbMetaApi/GetSubscribedAppsByPage", reqData).subscribe((data: any) => {
+  //       if (data) {
+  //         resolve(data)
+  //       } else {
+  //         reject(data);
+  //       }
+  //     });
+  //   })
+  // }
   subscribePage(pageDetails: any = {}) {
-    let reqData = {
-      PageId: pageDetails.id,
-      AccessToken: pageDetails.access_token
-    }
+    const body = new URLSearchParams();
+    body.set('subscribed_fields', 'leadgen');
     return new Promise((resolve, reject) => {
-      this.api.get("FbMetaApi/GetSubscribedAppsByPage", reqData).subscribe((data: any) => {
+      this.api.postFaceBook(pageDetails.id + "/subscribed_apps?access_token=" + pageDetails.access_token, body).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {

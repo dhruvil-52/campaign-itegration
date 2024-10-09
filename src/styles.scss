@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 html,
 body {
@@ -54,4 +55,23 @@ body {
 
 .error {
     color: red;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+    min-height: 52px;
+    border-radius: 8px;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    top: 13px
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input>input {
+    font-family: inherit !important;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+    border-color: #ccc !important;
+    box-shadow: none;
 }

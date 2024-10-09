@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { ViewFormDetailsComponent } from './view-form-details/view-form-details.component';
 import { LeadsComponent } from './leads/leads.component';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { LeadsComponent } from './leads/leads.component';
     CommonModule,
     FormsRoutingModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
   providers: [
     DatePipe

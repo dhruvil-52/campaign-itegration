@@ -5,3 +5,11 @@
 .field {
     margin-top: 1rem;
 }
+
+.campaign-dropdown {
+    margin-bottom: 1rem;
+    mat-hint {
+        font-size: 80%;
+        margin-left: 0.25rem;
+    }
+}
