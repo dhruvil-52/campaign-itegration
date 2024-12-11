@@ -20,12 +20,19 @@
         <mat-hint class="error" *ngIf="!pages.length">No Page Found</mat-hint>
     </mat-form-field> -->
     <div class="campaign-dropdown">
-        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Pages</mat-label>
-        <ng-select appendTo="body" [items]="pages" bindLabel="name" placeholder="Select an option"
+        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">
+            <div><span>Pages</span></div>
+            <div>
+                <span (click)="reloadPages()" [title]="'Fetch Data'">
+                    <mat-icon matListItemIcon>replay</mat-icon>
+                </span>
+            </div>
+        </mat-label>
+        <ng-select appendTo="body" [items]="pages" bindLabel="Name" placeholder="Select an option"
             [(ngModel)]="formData.Page" [searchable]="true" [clearable]="true" (change)="onPageChange()">
         </ng-select>
-        <mat-hint *ngIf="pages.length">Select a page</mat-hint>
-        <mat-hint class="error" *ngIf="!pages.length">No Page Found</mat-hint>
+        <mat-hint *ngIf="pages?.length">Select a page</mat-hint>
+        <mat-hint class="error" *ngIf="!pages?.length">No Page Found</mat-hint>
     </div>
 
     <!-- <mat-form-field class="mb-2" appearance="outline">
@@ -39,15 +46,22 @@
         <mat-hint class="error" *ngIf="!forms.length">No Form Found</mat-hint>
     </mat-form-field> -->
     <div class="campaign-dropdown">
-        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Forms</mat-label>
-        <ng-select appendTo="body" [items]="forms" bindLabel="name" placeholder="Select an option"
+        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">
+            <div><span>Forms</span></div>
+            <div>
+                <span (click)="reloadForms()" [title]="'Fetch Data'" *ngIf="!!formData?.Page">
+                    <mat-icon matListItemIcon>replay</mat-icon>
+                </span>
+            </div>
+        </mat-label>
+        <ng-select appendTo="body" [items]="forms" bindLabel="Name" placeholder="Select an option"
             [(ngModel)]="formData.Form" [searchable]="true" [clearable]="true" (change)="onFormChange()">
         </ng-select>
-        <mat-hint *ngIf="forms.length">Select Lead form associated to the page</mat-hint>
-        <mat-hint class="error" *ngIf="!forms.length">No Form Found</mat-hint>
+        <mat-hint *ngIf="forms?.length">Select Lead form associated to the page</mat-hint>
+        <mat-hint class="error" *ngIf="!forms?.length">No Form Found</mat-hint>
     </div>
 
-    <ng-container *ngIf="formData.Form && formData.Form.id">
+    <ng-container *ngIf="formData.Form && formData.Form.Id">
         <mat-label>
             <h4 class="divider">Fields Mapping</h4>
         </mat-label>
@@ -70,14 +84,33 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field> -->
-                <div class="campaign-dropdown" *ngIf="!field.isInput">
+                <div class="campaign-dropdown" *ngIf="!field.Type">
                     <ng-select appendTo="body" [items]="questions" bindLabel="label" placeholder="Select an option"
                         [searchable]="true" [clearable]="true" (change)="onFieldSelected($event,field)">
                     </ng-select>
                 </div>
-                <mat-form-field appearance="outline" class="w-100" color="primary" *ngIf="!!field.isInput">
-                    <input matInput name="fname" [(ngModel)]="field.remark"
-                        class="form-control form-control-lg input-square" type="text" placeholder="Enter {{field.placeholder}}">
+                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'project'">
+                    <ng-select appendTo="body" [items]="projects" bindValue="Id" bindLabel="ProjectName"
+                        placeholder="Select an option" [searchable]="true" [clearable]="true"
+                        [(ngModel)]="field.projectId">
+                    </ng-select>
+                </div>
+                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'campaign'">
+                    <ng-select appendTo="body" [items]="campaigns" bindValue="Id" bindLabel="Name"
+                        placeholder="Select an option" [searchable]="true" [clearable]="true"
+                        [(ngModel)]="field.campaignId">
+                    </ng-select>
+                </div>
+                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'user'">
+                    <ng-select appendTo="body" [items]="users" bindValue="Id" bindLabel="Name"
+                        placeholder="Select an option" [searchable]="true" [clearable]="true"
+                        [(ngModel)]="field.userId">
+                    </ng-select>
+                </div>
+                <mat-form-field appearance="outline" class="w-100" color="primary"
+                    *ngIf="!!field.Type && field.Type == 'remark'">
+                    <input matInput name="fRemark" class="form-control form-control-lg input-square" type="text"
+                        placeholder="Enter Remark" [(ngModel)]="field.remark">
                 </mat-form-field>
             </div>
         </div>

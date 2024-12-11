@@ -67,6 +67,6 @@ export class FormsComponent implements OnInit {
   viewLeads(data: any) {
     console.log(data)
     localStorage.setItem('selectedForm', JSON.stringify(data));
-    this.router.navigate(['leadGen-forms/leads', data.FormRefId]);
+    this.router.navigate(['leadGen-forms/leads', data.Id]);
   }
 }

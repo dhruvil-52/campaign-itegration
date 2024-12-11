@@ -92,26 +92,9 @@ export class ControllerService {
     })
   }
 
-  // subscribePage(pageDetails: any = {}) {
-  //   let reqData = {
-  //     PageId: pageDetails.id,
-  //     AccessToken: pageDetails.access_token
-  //   }
-  //   return new Promise((resolve, reject) => {
-  //     this.api.get("FbMetaApi/GetSubscribedAppsByPage", reqData).subscribe((data: any) => {
-  //       if (data) {
-  //         resolve(data)
-  //       } else {
-  //         reject(data);
-  //       }
-  //     });
-  //   })
-  // }
-  subscribePage(pageDetails: any = {}) {
-    const body = new URLSearchParams();
-    body.set('subscribed_fields', 'leadgen');
+  fetchAllPages() {
     return new Promise((resolve, reject) => {
-      this.api.postFaceBook(pageDetails.id + "/subscribed_apps?access_token=" + pageDetails.access_token, body).subscribe((data: any) => {
+      this.api.get("FbMetaApi/FetchPages").subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
@@ -121,11 +104,53 @@ export class ControllerService {
     })
   }
 
+  fetchAllForms(pageDetails: any = {}) {
+    let reqData = {
+      pageId: pageDetails.Id
+    }
+    return new Promise((resolve, reject) => {
+      this.api.get("FbMetaApi/FetchForms", reqData).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+
+  subscribePage(pageDetails: any = {}) {
+    let reqData = {
+      pageId: pageDetails.Id
+    }
+    return new Promise((resolve, reject) => {
+      this.api.get("FbMetaApi/GetSubscribedAppsByPage", reqData).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+  // subscribePage(pageDetails: any = {}) {
+  //   const body = new URLSearchParams();
+  //   body.set('subscribed_fields', 'leadgen');
+  //   return new Promise((resolve, reject) => {
+  //     this.api.postFaceBook(pageDetails.Id + "/subscribed_apps?access_token=" + pageDetails.access_token, body).subscribe((data: any) => {
+  //       if (data) {
+  //         resolve(data)
+  //       } else {
+  //         reject(data);
+  //       }
+  //     });
+  //   })
+  // }
+
 
   getAllFormsByPageId(pageDetails: any = {}) {
     let reqData = {
-      PageId: pageDetails.id,
-      AccessToken: pageDetails.access_token
+      pageId: pageDetails.Id
     }
     return new Promise((resolve, reject) => {
       this.api.get("FbMetaApi/GetForms", reqData).subscribe((data: any) => {
@@ -140,8 +165,7 @@ export class ControllerService {
 
   getFormDataByFormId(formDetails: any = {}, pageDetails: any = {}) {
     let reqData = {
-      FormId: formDetails.id,
-      AccessToken: pageDetails.access_token
+      formId: formDetails.Id
     }
     return new Promise((resolve, reject) => {
       this.api.get("FbMetaApi/GetFormData", reqData).subscribe((data: any) => {
@@ -157,10 +181,50 @@ export class ControllerService {
 
   getAllLeadsByFormId(formId: any = null, userData: any = {}) {
     let reqData = {
-      FormId: formId
+      formId: formId
     }
     return new Promise((resolve, reject) => {
       this.api.get("FbMetaApi/GetLeadsByForm", reqData).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+
+  getAllCampaigns() {
+    return new Promise((resolve, reject) => {
+      let reqData: any = {
+        PageSize: 10000000,
+        PageNumber: 1
+      }
+      this.api.get("GetCampaigns", { jsonData: JSON.stringify(reqData) }).subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+
+  getAllUsers() {
+    return new Promise((resolve, reject) => {
+      this.api.get("GetAllUser").subscribe((data: any) => {
+        if (data) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
+
+  getAllProjects(qParam = {}) {
+    return new Promise((resolve, reject) => {
+      this.api.get("Projects/GetListForDDL", { jsonData: JSON.stringify(qParam) }).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {

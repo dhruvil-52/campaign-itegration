@@ -8,8 +8,23 @@
 
 .campaign-dropdown {
     margin-bottom: 1rem;
+
     mat-hint {
         font-size: 80%;
         margin-left: 0.25rem;
+    }
+}
+
+mat-label {
+
+    display: flex !important;
+    gap: 2px;
+    font-size: inherit !important;
+    align-items: center;
+    margin-bottom: 2px;
+    justify-content: space-between;
+
+    span {
+        cursor: pointer !important;
     }
 }

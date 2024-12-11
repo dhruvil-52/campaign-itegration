@@ -46,28 +46,32 @@ export class LeadsComponent implements OnInit, OnDestroy {
   getPagesOfForm() {
     this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails).then((response: any) => {
       console.log("Pages", JSON.stringify(response.Data));
-      this.leads = response.Data.map((item: any) => {
-        const result: any = {};
-        Object.keys(item).forEach(key => {
-          if (key !== 'field_data' && key !== 'id') {
-            console.log(key)
-            let isPresent = this.displayedColumns.includes(key);
-            if (!isPresent) {
-              this.displayedColumns.push(key);
+      if (response.Data && response.Data.length) {
+        this.leads = response.Data.map((item: any) => {
+          const result: any = {};
+          Object.keys(item).forEach(key => {
+            if (key !== 'field_data' && key !== 'id') {
+              console.log(key)
+              let isPresent = this.displayedColumns.includes(key);
+              if (!isPresent) {
+                this.displayedColumns.push(key);
+              }
+              result[key] = this.isDateString(item[key]) ? this.datePipe.transform(item[key], 'medium') : item[key];
             }
-            result[key] = this.isDateString(item[key]) ? this.datePipe.transform(item[key], 'medium') : item[key];
-          }
+          });
+          item.field_data.forEach((field: any) => {
+            let isPresent = this.displayedColumns.includes(field.name);
+            if (!isPresent) {
+              this.displayedColumns.push(field.name);
+            }
+            result[field.name] = field.values[0];
+          });
+          return result;
         });
-        item.field_data.forEach((field: any) => {
-          let isPresent = this.displayedColumns.includes(field.name);
-          if (!isPresent) {
-            this.displayedColumns.push(field.name);
-          }
-          result[field.name] = field.values[0];
-        });
-        return result;
-      });
-      console.log("Pages", JSON.stringify(this.leads));
+        console.log("Pages", JSON.stringify(this.leads));
+      } else {
+        console.log("No leads found");
+      }
     }).catch((e) => {
       console.log("Error while getting Pages", e)
     })
