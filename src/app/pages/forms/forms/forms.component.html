@@ -11,6 +11,16 @@
                 </mat-card-title>
                 <div class="table-responsive m-t-16">
                     <table mat-table [dataSource]="forms" class="w-100">
+
+                        <ng-container matColumnDef="PageName">
+                            <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
+                                Page Name
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="mat-body-1">
+                                {{ element.PageName }}
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="Name">
                             <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
                                 Form Name
@@ -22,19 +32,10 @@
 
                         <ng-container matColumnDef="FacebookFormName">
                             <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-                                Facebook Form
+                                Meta Form Name
                             </th>
                             <td mat-cell *matCellDef="let element" class="mat-body-1">
                                 {{ element.FormName | titlecase }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="PageName">
-                            <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-                                Page Name
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="mat-body-1">
-                                {{ element.PageName }}
                             </td>
                         </ng-container>
 

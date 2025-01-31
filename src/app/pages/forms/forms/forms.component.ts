@@ -43,7 +43,7 @@ export class FormsComponent implements OnInit {
   openAddFormModal(element?: any): void {
     const dialogRef = this.dialog.open(AddFormComponent, {
       width: '900px',
-      data: element ? element  : null
+      data: element ? element : null
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -67,11 +67,11 @@ export class FormsComponent implements OnInit {
 
   viewLeads(data: any) {
     console.log(data)
-    localStorage.setItem('selectedForm', JSON.stringify(data));
+    localStorage.setItem(data.Id, JSON.stringify(data));
     this.router.navigate(['leadGen-forms/leads', data.Id]);
   }
 
-  openDeleteFormModal(element:any): void {
+  openDeleteFormModal(element: any): void {
     const dialogRef = this.dialog.open(DeleteformsComponent, {
       width: '400px',
       data: { id: element.Id, fileName: element.Name }
@@ -84,9 +84,11 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  deleteLeads(id:any) {
-    this.cs.deleteFromData(id).then(res =>{
-      this.ts.success(`Deleted Successfully`, 'Success')
+  deleteLeads(id: any) {
+    this.cs.deleteFromData(id).then(res => {
+      this.ts.success(`Record deleted successfully`, 'Success')
+    }, (err) => {
+      this.ts.error(`Error while deleting Record`, 'Failed')
     })
   }
 }

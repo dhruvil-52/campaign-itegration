@@ -82,7 +82,7 @@ export class ControllerService {
 
   deleteFromData(reqData: any = {}) {
     return new Promise((resolve, reject) => {
-      this.api.post("CompanyMetaForm/Delete/"+reqData,{}).subscribe((data: any) => {
+      this.api.post("CompanyMetaForm/Delete/" + reqData, {}).subscribe((data: any) => {
         if (data.Success) {
           resolve(data.Data)
         } else {
@@ -203,29 +203,29 @@ export class ControllerService {
   }
 
 
-  getAllLeadsByFormId(formId: any = null, userData: any = {}) {
-    // let reqData = {
-    //   formId: formId
-    // }
-    return new Promise((resolve, reject) => {
-      this.api.get("CompanyMetaForm/Get/"+formId).subscribe((data: any) => {
-        if (data) {
-          resolve(data)
-        } else {
-          reject(data);
-        }
-      });
-    })
-  }
+  // getAllLeadsByFormId(formId: any = null, userData: any = {}) {
+  //   // let reqData = {
+  //   //   formId: formId
+  //   // }
+  //   return new Promise((resolve, reject) => {
+  //     this.api.get("CompanyMetaForm/Get/" + formId).subscribe((data: any) => {
+  //       if (data) {
+  //         resolve(data)
+  //       } else {
+  //         reject(data);
+  //       }
+  //     });
+  //   })
+  // }
 
-  getAllLeadsByFormId1(formId: any = null, userData: any = {}) {
+  getAllLeadsByFormId(formId: any = null, userData: any = {}, pageNumber = 1, pageSize = 50) {
     let reqData = {
-      PageNumber: 1,
-      PageSize: 50,
+      PageNumber: pageNumber,
+      PageSize: pageSize,
       CompanyMetaFormId: formId
     }
     return new Promise((resolve, reject) => {
-      this.api.get("MetaLeadQueue/Get",{ jsonData: JSON.stringify(reqData)}).subscribe((data: any) => {
+      this.api.get("MetaLeadQueue/Get", { jsonData: JSON.stringify(reqData) }).subscribe((data: any) => {
         if (data) {
           resolve(data)
         } else {
