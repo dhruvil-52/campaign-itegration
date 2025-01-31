@@ -5,6 +5,7 @@ import { ViewFormDetailsComponent } from '../view-form-details/view-form-details
 import { ControllerService } from 'src/app/shared/services/controller.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { DeleteformsComponent } from '../deleteforms/deleteforms.component';
 
 @Component({
   selector: 'app-forms',
@@ -39,10 +40,10 @@ export class FormsComponent implements OnInit {
     })
   }
 
-  openAddFormModal(): void {
+  openAddFormModal(element?: any): void {
     const dialogRef = this.dialog.open(AddFormComponent, {
       width: '900px',
-      data: {}
+      data: element ? element  : null
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -68,5 +69,24 @@ export class FormsComponent implements OnInit {
     console.log(data)
     localStorage.setItem('selectedForm', JSON.stringify(data));
     this.router.navigate(['leadGen-forms/leads', data.Id]);
+  }
+
+  openDeleteFormModal(element:any): void {
+    const dialogRef = this.dialog.open(DeleteformsComponent, {
+      width: '400px',
+      data: { id: element.Id, fileName: element.Name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteLeads(result.id);
+      }
+    });
+  }
+
+  deleteLeads(id:any) {
+    this.cs.deleteFromData(id).then(res =>{
+      this.ts.success(`Deleted Successfully`, 'Success')
+    })
   }
 }

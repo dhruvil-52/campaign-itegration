@@ -9,13 +9,15 @@ import { MaterialModule } from 'src/app/shared/material.module';
 import { ViewFormDetailsComponent } from './view-form-details/view-form-details.component';
 import { LeadsComponent } from './leads/leads.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DeleteformsComponent } from './deleteforms/deleteforms.component';
 
 @NgModule({
   declarations: [
     FormsComponent,
     AddFormComponent,
     ViewFormDetailsComponent,
-    LeadsComponent
+    LeadsComponent,
+    DeleteformsComponent
   ],
   imports: [
     CommonModule,

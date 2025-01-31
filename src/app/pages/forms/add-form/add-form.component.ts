@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ControllerService } from 'src/app/shared/services/controller.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -15,6 +15,7 @@ export class AddFormComponent implements OnInit {
   campaigns: any[] = [];
   users: any[] = [];
   projects: any[] = [];
+  isEditMode: boolean = false;
   formData: any = {
     questions: [
       {
@@ -78,12 +79,22 @@ export class AddFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private cs: ControllerService,
     private ts: ToastrService,
     private userService: UserService) {
   }
 
   ngOnInit(): void {
+    if (!!this.data) {
+      this.isEditMode = true;
+      this.cs.getAllLeadsByFormId(this.data).then((res: any) => {
+        this.formData = res.Data;
+      })
+      console.log(this.formData);
+    } else {
+      this.isEditMode = false;
+    }
     if (!!this.userService.user) {
       this.loggedInUserDetails = this.userService.user;
       console.log('loggedInUserDetails', JSON.stringify(this.loggedInUserDetails));
@@ -160,7 +171,7 @@ export class AddFormComponent implements OnInit {
       this.forms = response.Data;
       console.log("Forms", JSON.stringify(this.forms));
 
-      if(!this.forms?.length){
+      if (!this.forms?.length) {
         this.reloadForms();
       }
     }).catch((e) => {
@@ -207,15 +218,28 @@ export class AddFormComponent implements OnInit {
       let data: any = JSON.parse(JSON.stringify(this.formData));
       data.PageId = data.Page.Id
       data.FormId = data.Form.Id
+      data.campaignId = 
+        data.questions.find((res: any) => res.campaignId)?.campaignId || null;
+      data.projectId = 
+        data.questions.find((res: any) => res.projectId)?.projectId || null;
       delete data.Page;
       delete data.Form;
       console.log(JSON.stringify(data))
-      this.cs.addFromData(data).then((data) => {
-        this.ts.success(`Successfully LedGen Form Data Submitted`, 'Error')
-        this.dialogRef.close({ data: this.formData });
-      }, (error) => {
-        this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
-      })
+      if (!this.isEditMode) {
+        this.cs.addFromData(data).then((data) => {
+          this.ts.success(`Successfully LedGen Form Data Submitted`, 'Success')
+          this.dialogRef.close({ data: this.formData });
+        }, (error) => {
+          this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+        })
+      } else {
+        this.cs.updateFromData(data).then((data) => {
+          this.ts.success(`Successfully LedGen Form Data Updated`, 'Success')
+          this.dialogRef.close({ data: this.formData });
+        }, (error) => {
+          this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+        })
+      }
     }
   }
 

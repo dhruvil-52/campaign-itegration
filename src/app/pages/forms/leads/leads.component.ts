@@ -14,7 +14,6 @@ export class LeadsComponent implements OnInit, OnDestroy {
   leads: any = [];
   loggedInUserDetails: any = {};
   formData: any = {};
-  displayedColumns: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,14 +42,31 @@ export class LeadsComponent implements OnInit, OnDestroy {
     return !isNaN(Date.parse(value));
   }
 
+  displayedColumns: string[] = [
+    'CreatedDate',
+    'PageName',
+    'FormName',
+    'LeadId',
+    'LeadNumber',
+    'ClientName',
+    'ClientContact',
+    'ClientEmail',
+    'Success',
+    'IsReturned',
+    'Response',
+    'RawContent',
+  ];
+
+
   getPagesOfForm() {
-    this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails).then((response: any) => {
+    this.cs.getAllLeadsByFormId1(this.formId, this.loggedInUserDetails).then((response: any) => {
       console.log("Pages", JSON.stringify(response.Data));
       if (response.Data && response.Data.length) {
+        console.log(response.Data);
         this.leads = response.Data.map((item: any) => {
           const result: any = {};
           Object.keys(item).forEach(key => {
-            if (key !== 'field_data' && key !== 'id') {
+            if (key !== 'field_data' && key !== 'Id' && key !== 'Count') {
               console.log(key)
               let isPresent = this.displayedColumns.includes(key);
               if (!isPresent) {
@@ -59,16 +75,19 @@ export class LeadsComponent implements OnInit, OnDestroy {
               result[key] = this.isDateString(item[key]) ? this.datePipe.transform(item[key], 'medium') : item[key];
             }
           });
-          item.field_data.forEach((field: any) => {
-            let isPresent = this.displayedColumns.includes(field.name);
-            if (!isPresent) {
-              this.displayedColumns.push(field.name);
-            }
-            result[field.name] = field.values[0];
-          });
+          if (item.field_data) {
+            item.field_data.forEach((field: any) => {
+              let isPresent = this.displayedColumns.includes(field.name);
+              if (!isPresent) {
+                this.displayedColumns.push(field.name);
+              }
+              result[field.name] = field.values[0];
+            });
+          }
           return result;
         });
-        console.log("Pages", JSON.stringify(this.leads));
+        this.leads = response.Data
+        console.log("Pages", this.leads);
       } else {
         console.log("No leads found");
       }
