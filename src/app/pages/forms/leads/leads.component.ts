@@ -1,8 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ControllerService } from 'src/app/shared/services/controller.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { ViewLeadDetailsComponent } from './view-lead-details/view-lead-details.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-leads',
@@ -14,11 +15,27 @@ export class LeadsComponent implements OnInit, OnDestroy {
   leads: any = [];
   loggedInUserDetails: any = {};
   formData: any = {};
+  displayedColumns: string[] = [
+    'CreatedDate',
+    'PageName',
+    'FormName',
+    'CompanyMetaFormName',
+    'LeadId',
+    'LeadNumber',
+    'ClientName',
+    'ClientContact',
+    'ClientEmail',
+    'Success',
+    'IsReturned',
+    'IsCompleted',
+    'Response',
+    'Details',
+  ];
 
   constructor(
     private route: ActivatedRoute,
     private cs: ControllerService,
-    private datePipe: DatePipe,
+    public dialog: MatDialog,
     private userService: UserService) {
   }
 
@@ -26,8 +43,8 @@ export class LeadsComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((data: any) => {
       this.formId = + data['id'];
     })
-    if (localStorage.getItem('selectedForm')) {
-      let data: any = localStorage.getItem('selectedForm');
+    if (localStorage.getItem(this.formId)) {
+      let data: any = localStorage.getItem(this.formId);
       this.formData = JSON.parse(data);
     }
     if (this.formId) {
@@ -38,28 +55,8 @@ export class LeadsComponent implements OnInit, OnDestroy {
     }
   }
 
-  isDateString(value: any) {
-    return !isNaN(Date.parse(value));
-  }
-
-  displayedColumns: string[] = [
-    'CreatedDate',
-    'PageName',
-    'FormName',
-    'LeadId',
-    'LeadNumber',
-    'ClientName',
-    'ClientContact',
-    'ClientEmail',
-    'Success',
-    'IsReturned',
-    'Response',
-    'RawContent',
-  ];
-
-
   getPagesOfForm() {
-    this.cs.getAllLeadsByFormId1(this.formId, this.loggedInUserDetails).then((response: any) => {
+    this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails).then((response: any) => {
       console.log("Pages", JSON.stringify(response.Data));
       if (response.Data && response.Data.length) {
         console.log(response.Data);
@@ -73,8 +70,17 @@ export class LeadsComponent implements OnInit, OnDestroy {
     })
   }
 
+  viewDetails(data: any) {
+    const dialogRef = this.dialog.open(ViewLeadDetailsComponent, {
+      width: '900px',
+      data: data.RawContent ? JSON.parse(data.RawContent) : {}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => { });
+  }
+
   ngOnDestroy(): void {
-    localStorage.removeItem('selectedForm')
+    localStorage.removeItem(this.formId)
   }
 
 }
