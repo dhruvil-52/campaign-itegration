@@ -10,6 +10,7 @@ import { ViewFormDetailsComponent } from './view-form-details/view-form-details.
 import { LeadsComponent } from './leads/leads.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DeleteformsComponent } from './deleteforms/deleteforms.component';
+import { ViewLeadDetailsComponent } from './leads/view-lead-details/view-lead-details.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { DeleteformsComponent } from './deleteforms/deleteforms.component';
     AddFormComponent,
     ViewFormDetailsComponent,
     LeadsComponent,
-    DeleteformsComponent
+    DeleteformsComponent,
+    ViewLeadDetailsComponent
   ],
   imports: [
     CommonModule,

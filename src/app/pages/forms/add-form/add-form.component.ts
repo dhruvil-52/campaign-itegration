@@ -151,7 +151,12 @@ export class AddFormComponent implements OnInit {
 
   reloadForms() {
     this.cs.fetchAllForms(this.formData.Page).then((response: any) => {
-      this.onPageChange();
+      this.cs.getAllFormsByPageId(this.formData.Page).then((response: any) => {
+        this.forms = response.Data || [];
+        console.log("Forms", JSON.stringify(this.forms));
+      }).catch((e) => {
+        console.log("Error while getting Forms By Page Id", e)
+      })
     }).catch((e) => {
       console.log("Error while fetching form", e)
     })
@@ -218,10 +223,8 @@ export class AddFormComponent implements OnInit {
       let data: any = JSON.parse(JSON.stringify(this.formData));
       data.PageId = data.Page.Id
       data.FormId = data.Form.Id
-      data.campaignId = 
-        data.questions.find((res: any) => res.campaignId)?.campaignId || null;
-      data.projectId = 
-        data.questions.find((res: any) => res.projectId)?.projectId || null;
+      data.campaignId = data.questions.find((res: any) => res.campaignId)?.campaignId || null;
+      data.projectId = data.questions.find((res: any) => res.projectId)?.projectId || null;
       delete data.Page;
       delete data.Form;
       console.log(JSON.stringify(data))
