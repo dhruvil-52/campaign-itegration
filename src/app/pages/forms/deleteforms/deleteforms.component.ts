@@ -19,7 +19,7 @@ export class DeleteformsComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       this.id = this.data.id;
-      this.fileName = this.data.fileName || 'this file';
+      this.fileName = this.data.fileName || 'this';
     }
   }
 
