@@ -63,29 +63,6 @@ export class LeadsComponent implements OnInit, OnDestroy {
       console.log("Pages", JSON.stringify(response.Data));
       if (response.Data && response.Data.length) {
         console.log(response.Data);
-        this.leads = response.Data.map((item: any) => {
-          const result: any = {};
-          Object.keys(item).forEach(key => {
-            if (key !== 'field_data' && key !== 'Id' && key !== 'Count') {
-              console.log(key)
-              let isPresent = this.displayedColumns.includes(key);
-              if (!isPresent) {
-                this.displayedColumns.push(key);
-              }
-              result[key] = this.isDateString(item[key]) ? this.datePipe.transform(item[key], 'medium') : item[key];
-            }
-          });
-          if (item.field_data) {
-            item.field_data.forEach((field: any) => {
-              let isPresent = this.displayedColumns.includes(field.name);
-              if (!isPresent) {
-                this.displayedColumns.push(field.name);
-              }
-              result[field.name] = field.values[0];
-            });
-          }
-          return result;
-        });
         this.leads = response.Data
         console.log("Pages", this.leads);
       } else {
