@@ -73,7 +73,8 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
-                <div class="paginator-container">
+                <div *ngIf="forms.length === 0" class="text-center">No records found</div>
+                <div class="paginator-container" *ngIf="forms.length > 0">
                     <mat-paginator [length]="totalRecords" [pageSize]="pageSize"
                         [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]" (page)="onPageChange($event)">
                     </mat-paginator>

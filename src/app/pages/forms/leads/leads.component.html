@@ -98,16 +98,13 @@
               </td>
             </ng-container>
 
-            <thead>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            </thead>
-            <tbody>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </tbody>
-
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </div>
-        <div class="paginator-container">
+
+        <div *ngIf="leads.length === 0" class="text-center">No records found</div>
+        <div class="paginator-container" *ngIf="leads.length > 0">
           <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
             (page)="onPageChange($event)">
           </mat-paginator>
