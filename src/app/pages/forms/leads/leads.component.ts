@@ -69,16 +69,13 @@ export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails, this.pageNumber, this.pageSize).then((response: any) => {
       console.log("Pages", JSON.stringify(response.Data));
       if (response.Data && response.Data.length) {
-        console.log(response.Data);
         this.leads = response.Data;
-        this.leads = this.leads.concat(this.leads).concat(this.leads).concat(this.leads)
         this.totalRecords = response.Count;
         const startIndex = (this.pageNumber - 1) * this.pageSize;
         this.leads = this.leads.map((item: any, index: any) => ({
           ...item,
           index: startIndex + index + 1,
         })) || [];
-        console.log("Pages", this.leads);
       } else {
         console.log("No leads found");
       }

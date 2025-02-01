@@ -40,13 +40,17 @@ export class FormsComponent implements OnInit, AfterViewInit {
     this.forms = [];
     this.cs.getAllForms(this.pageNumber, this.pageSize).then((data: any) => {
       console.log("all forms", data)
-      this.forms = data.Data;
-      this.totalRecords = data.Count;
-      const startIndex = (this.pageNumber - 1) * this.pageSize;
-      this.forms = this.forms.map((item: any, index: any) => ({
-        ...item,
-        index: startIndex + index + 1,
-      })) || [];
+      if (data.Data && data.Data.length) {
+        this.forms = data.Data;
+        this.totalRecords = data.Count;
+        const startIndex = (this.pageNumber - 1) * this.pageSize;
+        this.forms = this.forms.map((item: any, index: any) => ({
+          ...item,
+          index: startIndex + index + 1,
+        })) || [];
+      } else {
+        console.log("No forms found");
+      }
     }, (error) => {
       console.log("Error while getting Forms", error)
       this.ts.error(`Error while getting Forms`, 'Error')
