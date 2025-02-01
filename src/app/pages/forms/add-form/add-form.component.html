@@ -19,6 +19,25 @@
         <mat-hint *ngIf="pages.length">Select a page</mat-hint>
         <mat-hint class="error" *ngIf="!pages.length">No Page Found</mat-hint>
     </mat-form-field> -->
+
+    <div class="campaign-dropdown">
+        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Buildesk Project</mat-label>
+        <ng-select appendTo="body" [virtualScroll]="true" [items]="projects" bindValue="Id" bindLabel="ProjectName"
+            placeholder="Select an option" [searchable]="true" [clearable]="true" [(ngModel)]="formData.projectId">
+        </ng-select>
+    </div>
+    <div class="campaign-dropdown">
+        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Buildesk Campaign</mat-label>
+        <ng-select appendTo="body" [virtualScroll]="true" [items]="campaigns" bindValue="Id" bindLabel="Name"
+            placeholder="Select an option" [searchable]="true" [clearable]="true" [(ngModel)]="formData.campaignId">
+        </ng-select>
+    </div>
+    <div class="campaign-dropdown">
+        <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Buildesk User</mat-label>
+        <ng-select appendTo="body" [virtualScroll]="true" [items]="users" bindValue="Id" bindLabel="Name"
+            placeholder="Select an option" [searchable]="true" [clearable]="true" [(ngModel)]="formData.userId">
+        </ng-select>
+    </div>
     <div class="campaign-dropdown">
         <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">
             <div><span>Pages</span></div>
@@ -28,8 +47,9 @@
                 </span>
             </div>
         </mat-label>
-        <ng-select appendTo="body" [items]="pages" bindLabel="Name" placeholder="Select an option"
-            [(ngModel)]="formData.Page" [searchable]="true" [clearable]="true" (change)="onPageChange()">
+        <ng-select appendTo="body" [virtualScroll]="true" [items]="pages" bindLabel="Name"
+            placeholder="Select an option" [(ngModel)]="formData.Page" [searchable]="true" [clearable]="true"
+            (change)="onPageChange()">
         </ng-select>
         <mat-hint *ngIf="pages?.length">Select a page</mat-hint>
         <mat-hint class="error" *ngIf="!pages?.length">No Page Found</mat-hint>
@@ -54,8 +74,9 @@
                 </span>
             </div>
         </mat-label>
-        <ng-select appendTo="body" [items]="forms" bindLabel="Name" placeholder="Select an option"
-            [(ngModel)]="formData.Form" [searchable]="true" [clearable]="true" (change)="onFormChange()">
+        <ng-select appendTo="body" [virtualScroll]="true" [items]="forms" bindLabel="Name"
+            placeholder="Select an option" [(ngModel)]="formData.Form" [searchable]="true" [clearable]="true"
+            (change)="onFormChange()">
         </ng-select>
         <mat-hint *ngIf="forms?.length">Select Lead form associated to the page</mat-hint>
         <mat-hint class="error" *ngIf="!forms?.length">No Form Found</mat-hint>
@@ -84,34 +105,12 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field> -->
-                <div class="campaign-dropdown" *ngIf="!field.Type">
-                    <ng-select appendTo="body" [items]="questions" bindLabel="label" placeholder="Select an option"
-                        [searchable]="true" [clearable]="true" (change)="onFieldSelected($event,field)">
-                    </ng-select>
-                </div>
-                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'project'">
-                    <ng-select appendTo="body" [items]="projects" bindValue="Id" bindLabel="ProjectName"
+                <div class="campaign-dropdown">
+                    <ng-select appendTo="body" [virtualScroll]="true" [items]="questions" bindLabel="label"
                         placeholder="Select an option" [searchable]="true" [clearable]="true"
-                        [(ngModel)]="field.projectId">
+                        (change)="onFieldSelected($event,field)" [(ngModel)]="field.FBLabel">
                     </ng-select>
                 </div>
-                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'campaign'">
-                    <ng-select appendTo="body" [items]="campaigns" bindValue="Id" bindLabel="Name"
-                        placeholder="Select an option" [searchable]="true" [clearable]="true"
-                        [(ngModel)]="field.campaignId">
-                    </ng-select>
-                </div>
-                <div class="campaign-dropdown" *ngIf="!!field.Type && field.Type == 'user'">
-                    <ng-select appendTo="body" [items]="users" bindValue="Id" bindLabel="Name"
-                        placeholder="Select an option" [searchable]="true" [clearable]="true"
-                        [(ngModel)]="field.userId">
-                    </ng-select>
-                </div>
-                <mat-form-field appearance="outline" class="w-100" color="primary"
-                    *ngIf="!!field.Type && field.Type == 'remark'">
-                    <input matInput name="fRemark" class="form-control form-control-lg input-square" type="text"
-                        placeholder="Enter Remark" [(ngModel)]="field.remark">
-                </mat-form-field>
             </div>
         </div>
     </ng-container>

@@ -76,9 +76,9 @@ export class ControllerService {
     return new Promise((resolve, reject) => {
       this.api.post("CompanyMetaForm/Create", reqData).subscribe((data: any) => {
         if (data.Success) {
-          resolve(data.Data)
+          resolve(data)
         } else {
-          reject(data.Message);
+          reject(data);
         }
       });
     })
@@ -88,9 +88,9 @@ export class ControllerService {
     return new Promise((resolve, reject) => {
       this.api.post("CompanyMetaForm/Delete/" + reqData, {}).subscribe((data: any) => {
         if (data.Success) {
-          resolve(data.Data)
+          resolve(data)
         } else {
-          reject(data.Message);
+          reject(data);
         }
       });
     })
@@ -112,9 +112,9 @@ export class ControllerService {
     return new Promise((resolve, reject) => {
       this.api.post("CompanyMetaForm/Update", reqData).subscribe((data: any) => {
         if (data.Success) {
-          resolve(data.Data)
+          resolve(data)
         } else {
-          reject(data.Message);
+          reject(data);
         }
       });
     })

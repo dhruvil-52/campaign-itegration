@@ -17,60 +17,42 @@ export class AddFormComponent implements OnInit {
   projects: any[] = [];
   isEditMode: boolean = false;
   formData: any = {
-    questions: [
+    questions: this.getQuestionDataForForm()
+  };
+
+  getQuestionDataForForm() {
+    return [
       {
         "CRMKey": "firstname",
         "CRMLabel": "First Name",
         "IsRequired": true,
-        "FBKey": "",
-        "FBLabel": ""
+        "FBKey": null,
+        "FBLabel": null
       },
       {
         "CRMKey": "lastname",
         "CRMLabel": "Last Name",
-        "FBKey": "",
-        "FBLabel": ""
+        "FBKey": null,
+        "FBLabel": null
       },
       {
         "CRMKey": "mobile",
         "CRMLabel": "Mobile",
         "IsRequired": true,
-        "FBKey": "",
-        "FBLabel": ""
+        "FBKey": null,
+        "FBLabel": null
       },
       {
         "CRMKey": "email",
         "CRMLabel": "Email",
-        "FBKey": "",
-        "FBLabel": ""
-      },
-      {
-        "CRMKey": "campaign",
-        "CRMLabel": "Buildesk Campaign",
-        "FBKey": "",
-        "FBLabel": "",
-        "Type": "campaign"
-      },
-      {
-        "CRMKey": "project",
-        "CRMLabel": "Buildesk Project",
-        "FBKey": "",
-        "FBLabel": "",
-        "Type": "project"
+        "FBKey": null,
+        "FBLabel": null
       },
       {
         "CRMKey": "remark",
         "CRMLabel": "Remark",
-        "FBKey": "",
-        "FBLabel": "",
-        "Type": "remark"
-      },
-      {
-        "CRMKey": "user",
-        "CRMLabel": "Buildesk User",
-        "FBKey": "",
-        "FBLabel": "",
-        "Type": "user"
+        "FBKey": null,
+        "FBLabel": null
       }
     ]
   };
@@ -79,30 +61,111 @@ export class AddFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public id: any,
     private cs: ControllerService,
     private ts: ToastrService,
     private userService: UserService) {
   }
 
   ngOnInit(): void {
-    if (!!this.data) {
+    this.getLookUpData();
+    if (!!this.id) {
       this.isEditMode = true;
-      this.cs.getAllLeadsByFormId(this.data).then((res: any) => {
-        this.formData = res.Data;
+      this.cs.getFormDataById(this.id).then((res: any) => {
+        if (res.Data) {
+          this.formData.name = res.Data.Name;
+          this.formData.campaignId = res.Data.CampaignId;
+          this.formData.projectId = res.Data.ProjectId;
+          this.formData.userId = res.Data.UserId;
+          this.setEditData(res.Data)
+        } else {
+          this.formData = {};
+          console.log("Form data not coming by formId")
+        }
       })
       console.log(this.formData);
     } else {
-      this.isEditMode = false;
+      console.log("Id not found");
     }
+  }
+
+  getLookUpData() {
     if (!!this.userService.user) {
       this.loggedInUserDetails = this.userService.user;
       console.log('loggedInUserDetails', JSON.stringify(this.loggedInUserDetails));
-      this.getAllPages();
+      if (!this.isEditMode) {
+        this.getAllPages();
+      }
       this.getAllCampaigns();
       this.getAllUsers();
       this.getAllProjects();
     }
+  }
+
+  setEditData(data: any) {
+    if (!this.userService.user) return;
+    this.loggedInUserDetails = this.userService.user;
+    console.log('loggedInUserDetails', JSON.stringify(this.loggedInUserDetails));
+
+    // Fetch all pages
+    this.cs.getAllPages().then((response: any) => {
+      this.pages = response.Data;
+      console.log("Pages", JSON.stringify(this.pages));
+
+      if (!data.PageId) return;
+      this.formData.Page = this.pages.find((e) => e.Id === data.PageId) || {};
+      this.forms = [];
+      this.formData.Form = null;
+      console.log(this.formData.Page);
+
+      // Subscribe to the page
+      this.cs.subscribePage(this.formData.Page).then((response: any) => {
+        console.log("subscribe page", JSON.stringify(response));
+      }).catch((e) => {
+        console.log("Error while subscribing to page", e);
+      });
+
+      // Fetch forms for the page
+      this.cs.getAllFormsByPageId(this.formData.Page).then((response: any) => {
+        this.forms = response.Data;
+        console.log("Forms", JSON.stringify(this.forms));
+        if (!this.forms?.length) {
+          this.fetchFormsAndProcess(data);
+        } else {
+          this.processFormData(data);
+        }
+      }).catch((e) => {
+        console.log("Error while getting Forms By Page Id", e);
+      });
+    }).catch((e) => {
+      console.log("Error while getting Pages", e);
+    });
+  }
+
+  fetchFormsAndProcess(data: any) {
+    this.cs.fetchAllForms(this.formData.Page).then(() => {
+      this.cs.getAllFormsByPageId(this.formData.Page).then((response: any) => {
+        this.forms = response.Data || [];
+        this.processFormData(data);
+      }).catch((e) => {
+        console.log("Error while getting Forms By Page Id", e);
+      });
+    }).catch((e) => {
+      console.log("Error while fetching forms", e);
+    });
+  }
+
+  processFormData(data: any) {
+    if (!data.Form_Id) return;
+    this.formData.Form = this.forms.find((e) => e.Id === data.Form_Id) || {};
+    this.formData.questions = this.getQuestionDataForForm();
+    this.cs.getFormDataByFormId(this.formData.Form, this.formData.Page).then((response: any) => {
+      this.questions = response.Data;
+      this.formData.questions = data.MetaFormKeyValues;
+      console.log("Form Data", JSON.stringify(this.questions));
+    }).catch((e) => {
+      console.log("Error while getting Form Details By form Id", e);
+    });
   }
 
   getAllCampaigns() {
@@ -186,6 +249,7 @@ export class AddFormComponent implements OnInit {
 
   onFormChange() {
     console.log(this.formData.Form)
+    this.formData.questions = this.getQuestionDataForForm();
     this.cs.getFormDataByFormId(this.formData.Form, this.formData.Page).then((response: any) => {
       this.questions = response.Data;
       console.log("Form Data", JSON.stringify(this.questions));
@@ -223,24 +287,31 @@ export class AddFormComponent implements OnInit {
       let data: any = JSON.parse(JSON.stringify(this.formData));
       data.PageId = data.Page.Id
       data.FormId = data.Form.Id
-      data.campaignId = data.questions.find((res: any) => res.campaignId)?.campaignId || null;
-      data.projectId = data.questions.find((res: any) => res.projectId)?.projectId || null;
       delete data.Page;
       delete data.Form;
       console.log(JSON.stringify(data))
       if (!this.isEditMode) {
-        this.cs.addFromData(data).then((data) => {
-          this.ts.success(`Successfully LedGen Form Data Submitted`, 'Success')
+        this.cs.addFromData(data).then((resp: any) => {
           this.dialogRef.close({ data: this.formData });
+          if (resp.Success) {
+            this.ts.success(`Successfully Form Data Submitted`, 'Success')
+          } else {
+            this.ts.error(resp.Message, 'Failed')
+          }
         }, (error) => {
-          this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+          this.ts.error(`Error while Submitting Form Data`, 'Error')
         })
       } else {
-        this.cs.updateFromData(data).then((data) => {
-          this.ts.success(`Successfully LedGen Form Data Updated`, 'Success')
+        data.Id = this.id;
+        this.cs.updateFromData(data).then((resp: any) => {
           this.dialogRef.close({ data: this.formData });
+          if (resp.Success) {
+            this.ts.success(`Successfully Form Data Updated`, 'Success')
+          } else {
+            this.ts.error(resp.Message, 'Failed')
+          }
         }, (error) => {
-          this.ts.error(`Error while Submitting LedGen Form Data`, 'Error')
+          this.ts.error(`Error while Submitting Form Data`, 'Error')
         })
       }
     }
