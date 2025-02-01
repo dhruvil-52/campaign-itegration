@@ -4,6 +4,10 @@
       <mat-card-content class="p-24">
         <mat-card-title>
           Leads &nbsp; {{formData.Name ? ' from &nbsp; '+ (formData.Name | titlecase) : ''}}
+
+          <button mat-icon-button style="float: right;" (click)="getPagesOfForm()" matTooltip="Refresh Lead Data">
+            <mat-icon matListItemIcon>refresh</mat-icon>
+          </button>
         </mat-card-title>
         <div class="table-responsive m-t-16 table-container">
           <table mat-table [dataSource]="leads" class="mat-elevation-z8">
@@ -61,8 +65,14 @@
             <ng-container matColumnDef="Success">
               <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14"> Status </th>
               <td mat-cell *matCellDef="let element" class="mat-body-1">
-                <mat-chip color="accent" class="blue-chip" *ngIf="!!element.Success">Succeeded</mat-chip>
-                <mat-chip color="primary" class="red-chip" *ngIf="!element.Success">Failed</mat-chip>
+                <div class="cell-container">
+                  <mat-chip color="accent" class="badge-success" *ngIf="!!element.Success">Success</mat-chip>
+                  <mat-chip color="primary" class="badge-danger" *ngIf="!element.Success">Failed</mat-chip>
+                  <button *ngIf="!element.Success" mat-icon-button (click)="regenerateLead(element.Id)"
+                    matTooltip="Regenerate Lead">
+                    <mat-icon matListItemIcon>refresh</mat-icon>
+                  </button>
+                </div>
               </td>
             </ng-container>
 
@@ -74,7 +84,9 @@
             <ng-container matColumnDef="Response">
               <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14"> Response </th>
               <td mat-cell *matCellDef="let element" class="mat-body-1 raw-content-cell"
-                [title]=" element.Response || '' "> {{ element.Response }} </td>
+                [title]="element.Response || ''">
+                {{ element.Response }}
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="Details">

@@ -96,6 +96,18 @@ export class ControllerService {
     })
   }
 
+  regenerateLead(Id: number) {
+    return new Promise((resolve, reject) => {
+      this.api.post("MetaLeadQueue/Regenerate/" + Id, {}).subscribe((data: any) => {
+        if (data.Success) {
+          resolve(data.Data)
+        } else {
+          reject(data.Message);
+        }
+      });
+    })
+  }
+
   updateFromData(reqData: any = {}) {
     return new Promise((resolve, reject) => {
       this.api.post("CompanyMetaForm/Update", reqData).subscribe((data: any) => {
@@ -207,20 +219,17 @@ export class ControllerService {
   }
 
 
-  // getAllLeadsByFormId(formId: any = null, userData: any = {}) {
-  //   // let reqData = {
-  //   //   formId: formId
-  //   // }
-  //   return new Promise((resolve, reject) => {
-  //     this.api.get("CompanyMetaForm/Get/" + formId).subscribe((data: any) => {
-  //       if (data) {
-  //         resolve(data)
-  //       } else {
-  //         reject(data);
-  //       }
-  //     });
-  //   })
-  // }
+  getFormDataById(formId: any = null, userData: any = {}) {
+    return new Promise((resolve, reject) => {
+      this.api.get("CompanyMetaForm/Get/" + formId).subscribe((data: any) => {
+        if (data && data.Success) {
+          resolve(data)
+        } else {
+          reject(data);
+        }
+      });
+    })
+  }
 
   getAllLeadsByFormId(formId: any = null, userData: any = {}, pageNumber = 1, pageSize = 50) {
     let reqData = {

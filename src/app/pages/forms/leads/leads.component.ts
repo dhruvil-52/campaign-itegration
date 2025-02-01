@@ -5,6 +5,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { ViewLeadDetailsComponent } from './view-lead-details/view-lead-details.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-leads',
@@ -41,6 +42,7 @@ export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private cs: ControllerService,
     public dialog: MatDialog,
+    private ts: ToastrService,
     private userService: UserService) {
   }
 
@@ -96,6 +98,14 @@ export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pageNumber = event.pageIndex + 1;
     this.pageSize = event.pageSize;
     this.getPagesOfForm();
+  }
+
+  regenerateLead(id: number) {
+    this.cs.regenerateLead(id).then(res => {
+      this.ts.success(`Lead Regenerated successfully`, 'Success')
+    }, (err) => {
+      this.ts.error(`Error while regenerating Lead`, 'Failed')
+    })
   }
 
   ngOnDestroy(): void {
