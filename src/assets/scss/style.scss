@@ -32,10 +32,14 @@ mat-form-field {
 
 .mat-subtitle-1,
 .mat-body-1 {
-    padding: 10px !important;
+    padding: 0px 10px !important;
 }
 
 .paginator-container {
     overflow-x: auto;
     white-space: nowrap;
 }
+
+// .pageWrapper{
+//     padding-bottom: 0px !important;
+// }
