@@ -31,9 +31,8 @@ export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
     'ClientName',
     'ClientContact',
     'ClientEmail',
-    'Success',
     'IsReturned',
-    'IsCompleted',
+    'Success',
     'Response',
     'Details',
   ];
