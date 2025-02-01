@@ -56,11 +56,15 @@ export class ControllerService {
   }
 
 
-  getAllForms(reqData: any = {}) {
+  getAllForms(pageNumber = 1, pageSize = 50) {
+    let reqData: any = {
+      PageNumber: pageNumber,
+      PageSize: pageSize
+    }
     return new Promise((resolve, reject) => {
       this.api.get("CompanyMetaForm/Get", { jsondata: JSON.stringify(reqData) }).subscribe((data: any) => {
         if (data.Success) {
-          resolve(data.Data)
+          resolve(data)
         } else {
           reject(data.Message);
         }

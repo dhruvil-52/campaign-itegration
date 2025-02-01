@@ -29,3 +29,13 @@ mat-form-field {
     width: 100% !important;
     max-width: 100% !important;
 }
+
+.mat-subtitle-1,
+.mat-body-1 {
+    padding: 10px !important;
+}
+
+.paginator-container {
+    overflow-x: auto;
+    white-space: nowrap;
+}

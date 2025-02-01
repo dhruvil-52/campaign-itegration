@@ -1,21 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ControllerService } from 'src/app/shared/services/controller.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ViewLeadDetailsComponent } from './view-lead-details/view-lead-details.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-leads',
   templateUrl: './leads.component.html',
   styleUrls: ['./leads.component.scss']
 })
-export class LeadsComponent implements OnInit, OnDestroy {
+export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
   formId: any;
   leads: any = [];
   loggedInUserDetails: any = {};
   formData: any = {};
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  totalRecords: number = 0;
+  pageNumber = 1;
+  pageSize = 50;
   displayedColumns: string[] = [
+    'position',
     'CreatedDate',
     'PageName',
     'FormName',
@@ -39,6 +45,10 @@ export class LeadsComponent implements OnInit, OnDestroy {
     private userService: UserService) {
   }
 
+  ngAfterViewInit() {
+    this.leads.paginator = this.paginator;
+  }
+
   ngOnInit() {
     this.route.params.subscribe((data: any) => {
       this.formId = + data['id'];
@@ -56,11 +66,18 @@ export class LeadsComponent implements OnInit, OnDestroy {
   }
 
   getPagesOfForm() {
-    this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails).then((response: any) => {
+    this.cs.getAllLeadsByFormId(this.formId, this.loggedInUserDetails, this.pageNumber, this.pageSize).then((response: any) => {
       console.log("Pages", JSON.stringify(response.Data));
       if (response.Data && response.Data.length) {
         console.log(response.Data);
-        this.leads = response.Data
+        this.leads = response.Data;
+        this.leads = this.leads.concat(this.leads).concat(this.leads).concat(this.leads)
+        this.totalRecords = response.Count;
+        const startIndex = (this.pageNumber - 1) * this.pageSize;
+        this.leads = this.leads.map((item: any, index: any) => ({
+          ...item,
+          index: startIndex + index + 1,
+        })) || [];
         console.log("Pages", this.leads);
       } else {
         console.log("No leads found");
@@ -77,6 +94,12 @@ export class LeadsComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result: any) => { });
+  }
+
+  onPageChange(event: any) {
+    this.pageNumber = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getPagesOfForm();
   }
 
   ngOnDestroy(): void {
