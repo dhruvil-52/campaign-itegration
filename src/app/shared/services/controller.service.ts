@@ -100,9 +100,9 @@ export class ControllerService {
     return new Promise((resolve, reject) => {
       this.api.post("MetaLeadQueue/Regenerate/" + Id, {}).subscribe((data: any) => {
         if (data.Success) {
-          resolve(data.Data)
+          resolve(data);
         } else {
-          reject(data.Message);
+          reject(data);
         }
       });
     })

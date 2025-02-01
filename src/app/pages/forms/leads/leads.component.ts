@@ -101,8 +101,12 @@ export class LeadsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   regenerateLead(id: number) {
-    this.cs.regenerateLead(id).then(res => {
-      this.ts.success(`Lead Regenerated successfully`, 'Success')
+    this.cs.regenerateLead(id).then((resp: any) => {
+      if (resp.Success) {
+        this.ts.success(`Lead Regenerated successfully`, 'Success')
+      } else {
+        this.ts.error(resp.Message, 'Failed')
+      }
     }, (err) => {
       this.ts.error(`Error while regenerating Lead`, 'Failed')
     })
