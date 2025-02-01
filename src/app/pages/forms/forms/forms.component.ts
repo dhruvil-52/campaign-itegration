@@ -104,6 +104,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
   deleteLeads(id: any) {
     this.cs.deleteFromData(id).then(res => {
       this.ts.success(`Record deleted successfully`, 'Success')
+      this.getAllForms();
     }, (err) => {
       this.ts.error(`Error while deleting Record`, 'Failed')
     })
