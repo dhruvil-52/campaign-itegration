@@ -44,3 +44,13 @@ mat-form-field {
 // .pageWrapper{
 //     padding-bottom: 0px !important;
 // }
+
+// add border to table
+.mat-table {
+    border-collapse: collapse;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+    border: 1px solid #f1f1f1 !important;
+}
