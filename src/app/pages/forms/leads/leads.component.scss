@@ -22,8 +22,8 @@
 //     z-index: 100 !important;
 // }
 
-.red-chip {
-    background-color: red !important;
+.badge-danger {
+    background-color: #dc3545 !important;
     color: white !important;
 
     ::ng-deep .mat-mdc-chip-action-label {
@@ -31,12 +31,28 @@
     }
 }
 
-.blue-chip {
-    background-color: blue !important;
+.badge-success {
+    background-color: #28a745 !important;
     color: white !important;
 
 
     ::ng-deep .mat-mdc-chip-action-label {
         color: white !important;
+    }
+}
+
+.cell-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+        padding: 0;
+        height: auto;
+        width: auto;
+    }
+
+    .mdc-icon-button {
+        font-size: unset;
     }
 }
